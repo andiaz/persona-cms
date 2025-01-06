@@ -49,6 +49,17 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
     setField((prev) => [...prev, '']);
   };
 
+  const handleDeleteField = (index, fieldName) => {
+    const setField = {
+      goals: setGoals,
+      painPoints: setPainPoints,
+      needs: setNeeds,
+      exampleTools: setExampleTools,
+    }[fieldName];
+
+    setField((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -76,6 +87,8 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
     setNeeds(['']);
     setExampleTools(['']);
   };
+
+  const shouldShowDeleteButton = (array) => array.length > 1;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -105,6 +118,14 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               Add Goal
             </button>
           )}
+          {shouldShowDeleteButton(goals) && (
+            <button
+              type="button"
+              onClick={() => handleDeleteField(index, 'goals')}
+            >
+              Delete Goal
+            </button>
+          )}
         </div>
       ))}
 
@@ -124,6 +145,14 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               Add Pain Point
             </button>
           )}
+          {shouldShowDeleteButton(painPoints) && (
+            <button
+              type="button"
+              onClick={() => handleDeleteField(index, 'painPoints')}
+            >
+              Delete Pain Point
+            </button>
+          )}
         </div>
       ))}
 
@@ -141,6 +170,14 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
           {index === needs.length - 1 && (
             <button type="button" onClick={() => handleAddField('needs')}>
               Add Need
+            </button>
+          )}
+          {shouldShowDeleteButton(needs) && (
+            <button
+              type="button"
+              onClick={() => handleDeleteField(index, 'needs')}
+            >
+              Delete Need
             </button>
           )}
         </div>
@@ -163,6 +200,14 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               onClick={() => handleAddField('exampleTools')}
             >
               Add Tool
+            </button>
+          )}
+          {shouldShowDeleteButton(exampleTools) && (
+            <button
+              type="button"
+              onClick={() => handleDeleteField(index, 'exampleTools')}
+            >
+              Delete Tool
             </button>
           )}
         </div>
