@@ -1,25 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import PersonaForm from '../components/PersonaForm';
 import PersonaList from '../components/PersonaList';
+import '../styles/globals.css';
 
 export default function Home() {
   const [personas, setPersonas] = useState([]);
 
+  useEffect(() => {
+    // Load personas from sessionStorage when the app is loaded
+    const savedPersonas = sessionStorage.getItem('personas');
+    if (savedPersonas) {
+      setPersonas(JSON.parse(savedPersonas));
+    }
+  }, []);
+
   const addPersona = (newPersona) => {
-    setPersonas((prevPersonas) => [...prevPersonas, newPersona]);
+    const updatedPersonas = [...personas, newPersona];
+    setPersonas(updatedPersonas);
+    sessionStorage.setItem('personas', JSON.stringify(updatedPersonas)); // Save to sessionStorage
   };
 
   const editPersona = (updatedPersona) => {
-    setPersonas((prevPersonas) =>
-      prevPersonas.map((persona) =>
-        persona.id === updatedPersona.id ? updatedPersona : persona
-      )
+    const updatedPersonas = personas.map((persona) =>
+      persona.id === updatedPersona.id ? updatedPersona : persona
     );
+    setPersonas(updatedPersonas);
+    sessionStorage.setItem('personas', JSON.stringify(updatedPersonas)); // Save to sessionStorage
   };
 
   const deletePersona = (id) => {
-    setPersonas(personas.filter((persona) => persona.id !== id));
+    const updatedPersonas = personas.filter((persona) => persona.id !== id);
+    setPersonas(updatedPersonas);
+    sessionStorage.setItem('personas', JSON.stringify(updatedPersonas)); // Save to sessionStorage
   };
 
   return (

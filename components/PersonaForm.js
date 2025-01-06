@@ -79,13 +79,15 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
       onAddPersona(newPersona); // Add new persona
     }
 
-    // Reset the form fields
-    setName('');
-    setGoals(['']);
-    setPainPoints(['']);
-    setContextOfUse('');
-    setNeeds(['']);
-    setExampleTools(['']);
+    // Only reset the form if it's a new persona being added
+    if (!personaToEdit) {
+      setName('');
+      setGoals(['']);
+      setPainPoints(['']);
+      setContextOfUse('');
+      setNeeds(['']);
+      setExampleTools(['']);
+    }
   };
 
   const shouldShowDeleteButton = (array) => array.length > 1;

@@ -1,7 +1,14 @@
-// components/PersonaList.js
 import React from 'react';
+import { useRouter } from 'next/router';
 
-const PersonaList = ({ personas, onEditPersona, onDeletePersona }) => {
+const PersonaList = ({ personas, onDeletePersona }) => {
+  const router = useRouter();
+
+  const handleEditClick = (persona) => {
+    // Navigate to the add-persona page with the persona ID
+    router.push(`/add-persona?id=${persona.id}`);
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Personas</h2>
@@ -49,7 +56,7 @@ const PersonaList = ({ personas, onEditPersona, onDeletePersona }) => {
               </div>
               <div className="mt-4">
                 <button
-                  onClick={() => onEditPersona(persona)}
+                  onClick={() => handleEditClick(persona)}
                   className="mr-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                 >
                   Edit
