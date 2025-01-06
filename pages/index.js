@@ -1,12 +1,10 @@
-// pages/index.js or App.js (depending on your setup)
 import { useState } from 'react';
-import '../styles/globals.css';
+import Link from 'next/link';
 import PersonaForm from '../components/PersonaForm';
 import PersonaList from '../components/PersonaList';
 
 export default function Home() {
   const [personas, setPersonas] = useState([]);
-  const [personaToEdit, setPersonaToEdit] = useState(null);
 
   const addPersona = (newPersona) => {
     setPersonas((prevPersonas) => [...prevPersonas, newPersona]);
@@ -18,7 +16,6 @@ export default function Home() {
         persona.id === updatedPersona.id ? updatedPersona : persona
       )
     );
-    setPersonaToEdit(null); // Clear the edit form after saving changes
   };
 
   const deletePersona = (id) => {
@@ -27,14 +24,16 @@ export default function Home() {
 
   return (
     <div>
-      <PersonaForm
-        onAddPersona={addPersona}
-        personaToEdit={personaToEdit}
-        onEditPersona={editPersona}
-      />
+      <h1 className="text-3xl font-semibold mb-6">Personas</h1>
+      <Link
+        href="/add-persona"
+        className="px-6 py-2 mt-4 bg-green-500 text-white rounded-md hover:bg-green-600"
+      >
+        Add New Persona
+      </Link>
       <PersonaList
         personas={personas}
-        onEditPersona={setPersonaToEdit}
+        onEditPersona={editPersona}
         onDeletePersona={deletePersona}
       />
     </div>
