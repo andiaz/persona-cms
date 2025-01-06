@@ -1,5 +1,6 @@
 // components/PersonaForm.js
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
   const [name, setName] = useState('');
@@ -8,6 +9,8 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
   const [contextOfUse, setContextOfUse] = useState('');
   const [needs, setNeeds] = useState(['']);
   const [exampleTools, setExampleTools] = useState(['']); // Default to one input field
+
+  const router = useRouter();
 
   useEffect(() => {
     if (personaToEdit) {
@@ -88,6 +91,12 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
       setNeeds(['']);
       setExampleTools(['']);
     }
+  };
+
+  const handleCancel = (event) => {
+    event.preventDefault();
+
+    router.push('/'); // Navigate back to the home page
   };
 
   const shouldShowDeleteButton = (array) => array.length > 1;
@@ -260,6 +269,13 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
           className="px-6 py-2 mt-4 bg-green-500 text-white rounded-md hover:bg-green-600"
         >
           {personaToEdit ? 'Save Changes' : 'Add Persona'}
+        </button>
+        <button
+          type="button"
+          onClick={handleCancel}
+          className="px-6 py-2 mt-4 ml-4 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+        >
+          Cancel
         </button>
       </div>
     </form>
