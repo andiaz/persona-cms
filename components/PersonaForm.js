@@ -91,131 +91,175 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
   const shouldShowDeleteButton = (array) => array.length > 1;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>{personaToEdit ? 'Edit Persona' : 'Add a New Persona'}</h3>
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 p-6 bg-white shadow-lg rounded-lg"
+    >
+      <h3 className="text-2xl font-semibold text-center">
+        {personaToEdit ? 'Edit Persona' : 'Add a New Persona'}
+      </h3>
 
-      <label>Name:</label>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
+      {/* Name Field */}
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">Name:</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
 
       {/* Goals */}
-      <label>Goals:</label>
-      {goals.map((goal, index) => (
-        <div key={`goal-${index}`}>
-          <input
-            type="text"
-            value={goal}
-            onChange={(e) => handleInputChange(e, index, 'goals')}
-            placeholder="Enter a goal"
-            required
-          />
-          {index === goals.length - 1 && (
-            <button type="button" onClick={() => handleAddField('goals')}>
-              Add Goal
-            </button>
-          )}
-          {shouldShowDeleteButton(goals) && (
-            <button
-              type="button"
-              onClick={() => handleDeleteField(index, 'goals')}
-            >
-              Delete Goal
-            </button>
-          )}
-        </div>
-      ))}
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">Goals:</label>
+        {goals.map((goal, index) => (
+          <div key={`goal-${index}`} className="space-y-2">
+            <input
+              type="text"
+              value={goal}
+              onChange={(e) => handleInputChange(e, index, 'goals')}
+              placeholder="Enter a goal"
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
+            />
+            {index === goals.length - 1 && (
+              <button
+                type="button"
+                onClick={() => handleAddField('goals')}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                Add Goal
+              </button>
+            )}
+            {shouldShowDeleteButton(goals) && (
+              <button
+                type="button"
+                onClick={() => handleDeleteField(index, 'goals')}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                Delete Goal
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
 
       {/* Pain Points */}
-      <label>Pain Points:</label>
-      {painPoints.map((painPoint, index) => (
-        <div key={`painPoint-${index}`}>
-          <input
-            type="text"
-            value={painPoint}
-            onChange={(e) => handleInputChange(e, index, 'painPoints')}
-            placeholder="Enter a pain point"
-            required
-          />
-          {index === painPoints.length - 1 && (
-            <button type="button" onClick={() => handleAddField('painPoints')}>
-              Add Pain Point
-            </button>
-          )}
-          {shouldShowDeleteButton(painPoints) && (
-            <button
-              type="button"
-              onClick={() => handleDeleteField(index, 'painPoints')}
-            >
-              Delete Pain Point
-            </button>
-          )}
-        </div>
-      ))}
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">Pain Points:</label>
+        {painPoints.map((painPoint, index) => (
+          <div key={`painPoint-${index}`} className="space-y-2">
+            <input
+              type="text"
+              value={painPoint}
+              onChange={(e) => handleInputChange(e, index, 'painPoints')}
+              placeholder="Enter a pain point"
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
+            />
+            {index === painPoints.length - 1 && (
+              <button
+                type="button"
+                onClick={() => handleAddField('painPoints')}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                Add Pain Point
+              </button>
+            )}
+            {shouldShowDeleteButton(painPoints) && (
+              <button
+                type="button"
+                onClick={() => handleDeleteField(index, 'painPoints')}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                Delete Pain Point
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
 
       {/* Needs */}
-      <label>Needs:</label>
-      {needs.map((need, index) => (
-        <div key={`need-${index}`}>
-          <input
-            type="text"
-            value={need}
-            onChange={(e) => handleInputChange(e, index, 'needs')}
-            placeholder="Enter a need"
-            required
-          />
-          {index === needs.length - 1 && (
-            <button type="button" onClick={() => handleAddField('needs')}>
-              Add Need
-            </button>
-          )}
-          {shouldShowDeleteButton(needs) && (
-            <button
-              type="button"
-              onClick={() => handleDeleteField(index, 'needs')}
-            >
-              Delete Need
-            </button>
-          )}
-        </div>
-      ))}
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">Needs:</label>
+        {needs.map((need, index) => (
+          <div key={`need-${index}`} className="space-y-2">
+            <input
+              type="text"
+              value={need}
+              onChange={(e) => handleInputChange(e, index, 'needs')}
+              placeholder="Enter a need"
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
+            />
+            {index === needs.length - 1 && (
+              <button
+                type="button"
+                onClick={() => handleAddField('needs')}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                Add Need
+              </button>
+            )}
+            {shouldShowDeleteButton(needs) && (
+              <button
+                type="button"
+                onClick={() => handleDeleteField(index, 'needs')}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                Delete Need
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
 
       {/* Example Tools */}
-      <label>Example Tools:</label>
-      {exampleTools.map((tool, index) => (
-        <div key={`tool-${index}`}>
-          <input
-            type="text"
-            value={tool}
-            onChange={(e) => handleInputChange(e, index, 'exampleTools')}
-            placeholder="Enter an example tool"
-            required
-          />
-          {index === exampleTools.length - 1 && (
-            <button
-              type="button"
-              onClick={() => handleAddField('exampleTools')}
-            >
-              Add Tool
-            </button>
-          )}
-          {shouldShowDeleteButton(exampleTools) && (
-            <button
-              type="button"
-              onClick={() => handleDeleteField(index, 'exampleTools')}
-            >
-              Delete Tool
-            </button>
-          )}
-        </div>
-      ))}
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">Example Tools:</label>
+        {exampleTools.map((tool, index) => (
+          <div key={`tool-${index}`} className="space-y-2">
+            <input
+              type="text"
+              value={tool}
+              onChange={(e) => handleInputChange(e, index, 'exampleTools')}
+              placeholder="Enter an example tool"
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
+            />
+            {index === exampleTools.length - 1 && (
+              <button
+                type="button"
+                onClick={() => handleAddField('exampleTools')}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                Add Tool
+              </button>
+            )}
+            {shouldShowDeleteButton(exampleTools) && (
+              <button
+                type="button"
+                onClick={() => handleDeleteField(index, 'exampleTools')}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                Delete Tool
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
 
-      <button type="submit">
-        {personaToEdit ? 'Save Changes' : 'Add Persona'}
-      </button>
+      {/* Submit Button */}
+      <div className="text-center">
+        <button
+          type="submit"
+          className="px-6 py-2 mt-4 bg-green-500 text-white rounded-md hover:bg-green-600"
+        >
+          {personaToEdit ? 'Save Changes' : 'Add Persona'}
+        </button>
+      </div>
     </form>
   );
 };

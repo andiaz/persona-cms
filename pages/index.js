@@ -1,5 +1,6 @@
 // pages/index.js or App.js (depending on your setup)
 import { useState } from 'react';
+import '../styles/globals.css';
 import PersonaForm from '../components/PersonaForm';
 import PersonaList from '../components/PersonaList';
 
