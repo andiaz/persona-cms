@@ -1,7 +1,7 @@
 // components/PersonaList.js
 import React from 'react';
 
-const PersonaList = ({ personas, onEditPersona }) => {
+const PersonaList = ({ personas, onEditPersona, onDeletePersona }) => {
   return (
     <div>
       <h2>Personas</h2>
@@ -45,6 +45,9 @@ const PersonaList = ({ personas, onEditPersona }) => {
                 </ul>
               </div>
               <button onClick={() => onEditPersona(persona)}>Edit</button>
+              <button onClick={() => onDeletePersona(persona.id)}>
+                Delete
+              </button>
             </li>
           ))
         )}

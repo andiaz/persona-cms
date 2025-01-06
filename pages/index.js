@@ -20,6 +20,10 @@ export default function Home() {
     setPersonaToEdit(null); // Clear the edit form after saving changes
   };
 
+  const deletePersona = (id) => {
+    setPersonas(personas.filter((persona) => persona.id !== id));
+  };
+
   return (
     <div>
       <PersonaForm
@@ -27,7 +31,11 @@ export default function Home() {
         personaToEdit={personaToEdit}
         onEditPersona={editPersona}
       />
-      <PersonaList personas={personas} onEditPersona={setPersonaToEdit} />
+      <PersonaList
+        personas={personas}
+        onEditPersona={setPersonaToEdit}
+        onDeletePersona={deletePersona}
+      />
     </div>
   );
 }
