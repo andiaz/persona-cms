@@ -9,6 +9,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
   const [contextOfUse, setContextOfUse] = useState('');
   const [needs, setNeeds] = useState(['']);
   const [exampleTools, setExampleTools] = useState(['']); // Default to one input field
+  const [tags, setTags] = useState([]); // Tags state
 
   const router = useRouter();
 
@@ -22,8 +23,26 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
       setExampleTools(
         personaToEdit.exampleTools.length ? personaToEdit.exampleTools : ['']
       ); // Ensure there's at least one field
+      setTags(personaToEdit.tags || []); // Load existing tags if editing
     }
   }, [personaToEdit]);
+
+  const handleAddTag = (e) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const newTag = e.target.value.trim();
+
+      if (newTag && !tags.includes(newTag)) {
+        setTags([...tags, newTag]);
+      }
+
+      e.target.value = ''; // Clear input after adding tag
+    }
+  };
+
+  const handleDeleteTag = (tagToDelete) => {
+    setTags(tags.filter((tag) => tag !== tagToDelete));
+  };
 
   const handleInputChange = (e, index, fieldName) => {
     const value = e.target.value;
@@ -74,6 +93,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
       contextOfUse,
       needs,
       exampleTools,
+      tags,
     };
 
     if (personaToEdit) {
@@ -90,12 +110,12 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
       setContextOfUse('');
       setNeeds(['']);
       setExampleTools(['']);
+      setTags([]);
     }
   };
 
   const handleCancel = (event) => {
     event.preventDefault();
-
     router.push('/'); // Navigate back to the home page
   };
 
@@ -120,6 +140,37 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
           required
           className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
         />
+      </div>
+
+      {/* Tag Input */}
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">Tags:</label>
+        <div className="flex flex-wrap items-center gap-2 border px-2 py-2 rounded-md">
+          {tags.map((tag, index) => (
+            <div
+              key={index}
+              className="bg-indigo-500 text-white px-3 py-1 rounded-full flex items-center gap-2"
+            >
+              <span>{tag}</span>
+              <button
+                type="button"
+                onClick={() => handleDeleteTag(tag)}
+                className="text-white hover:text-red-400"
+              >
+                &times;
+              </button>
+            </div>
+          ))}
+          <input
+            type="text"
+            onKeyDown={handleAddTag}
+            placeholder="Press Enter to add a tag"
+            className="flex-grow focus:outline-none"
+          />
+        </div>
+        <small className="text-gray-500">
+          Type a tag and press Enter or comma to add.
+        </small>
       </div>
 
       {/* Goals */}
