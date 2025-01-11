@@ -13,12 +13,6 @@ export default function Home() {
     }
   }, []);
 
-  const addPersona = (newPersona) => {
-    const updatedPersonas = [...personas, newPersona];
-    setPersonas(updatedPersonas);
-    sessionStorage.setItem('personas', JSON.stringify(updatedPersonas)); // Save to sessionStorage
-  };
-
   const editPersona = (updatedPersona) => {
     const updatedPersonas = personas.map((persona) =>
       persona.id === updatedPersona.id ? updatedPersona : persona
@@ -31,6 +25,14 @@ export default function Home() {
     const updatedPersonas = personas.filter((persona) => persona.id !== id);
     setPersonas(updatedPersonas);
     sessionStorage.setItem('personas', JSON.stringify(updatedPersonas)); // Save to sessionStorage
+  };
+
+  const addPersona = (newPersona) => {
+    const personas = JSON.parse(sessionStorage.getItem('personas') || '[]');
+    sessionStorage.setItem(
+      'personas',
+      JSON.stringify([...personas, newPersona])
+    );
   };
 
   return (
@@ -50,6 +52,7 @@ export default function Home() {
         personas={personas}
         onEditPersona={editPersona}
         onDeletePersona={deletePersona}
+        onAddPersona={addPersona}
       />
     </div>
   );
