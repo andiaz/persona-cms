@@ -117,113 +117,122 @@ const PersonaList = ({ personas, onDeletePersona }) => {
         )}
       </div>
 
-      <ul className="space-y-4">
+      <div className="mt-4">
         {personas.length === 0 ? (
           <p>No personas found.</p>
         ) : (
-          filteredPersonas.map((persona) => (
-            <li
-              key={persona.id}
-              className="p-4 border rounded-lg shadow-md hover:shadow-lg transition duration-200"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="relative w-16 h-16 bg-gray-200 rounded-full overflow-hidden shrink-0">
-                  {persona.avatarImage ? (
-                    <Image
-                      src={persona.avatarImage}
-                      alt={`${persona.name}'s avatar`}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm text-center">
-                      No image
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredPersonas.map((persona) => (
+              <li
+                key={persona.id}
+                className="p-4 border rounded-lg shadow-md hover:shadow-lg transition duration-200 h-full"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <Link
+                    href={`/view-persona?id=${persona.id}`}
+                    className="group flex items-center gap-4 cursor-pointer"
+                  >
+                    <div className="relative w-16 h-16 bg-gray-200 rounded-full overflow-hidden shrink-0 ring-2 ring-transparent group-hover:ring-blue-500 transition-all">
+                      {persona.avatarImage ? (
+                        <Image
+                          src={persona.avatarImage}
+                          alt={`${persona.name}'s avatar`}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm text-center">
+                          No image
+                        </div>
+                      )}
                     </div>
-                  )}
+                    <h3 className="text-xl font-semibold group-hover:text-blue-500 transition-colors">
+                      {persona.name}
+                    </h3>
+                  </Link>
                 </div>
-                <h3 className="text-xl font-semibold">{persona.name}</h3>
-              </div>
-              {/* Tags Section */}
-              <div className="mt-2">
-                <strong className="block">Tags:</strong>
-                <div className="flex flex-wrap gap-2 mt-1">
-                  {(persona.tags || []).length > 0 ? (
-                    persona.tags.map((tag, index) => (
-                      <span
-                        key={`tag-${index}`}
-                        onClick={() => handleEditClick(persona)}
-                        className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm"
-                      >
-                        {tag}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="text-gray-500 text-sm">No tags</span>
-                  )}
+                {/* Tags Section */}
+                <div className="mt-2">
+                  <strong className="block">Tags:</strong>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {(persona.tags || []).length > 0 ? (
+                      persona.tags.map((tag, index) => (
+                        <span
+                          key={`tag-${index}`}
+                          onClick={() => handleEditClick(persona)}
+                          className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm"
+                        >
+                          {tag}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-gray-500 text-sm">No tags</span>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {/* Goals Section */}
-              <div>
-                <strong className="block mt-2">Goals:</strong>
-                <ul className="list-disc pl-5">
-                  {(persona.goals || []).map((goal, index) => (
-                    <li key={`goal-${index}`}>{goal}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <strong className="block mt-2">Pain Points:</strong>
-                <ul className="list-disc pl-5">
-                  {(persona.painPoints || []).map((painPoint, index) => (
-                    <li key={`painPoint-${index}`}>{painPoint}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <strong className="block mt-2">Tasks:</strong>
-                <ul className="list-disc pl-5">
-                  {(persona.tasks || []).map((task, index) => (
-                    <li key={`task-${index}`}>{task}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <strong className="block mt-2">Functionality:</strong>
-                <ul className="list-disc pl-5">
-                  {(persona.functionality || []).map((func, index) => (
-                    <li key={`func-${index}`}>{func}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <strong className="block mt-2">Context of Use:</strong>
-                <p className="pl-5">{persona.contextOfUse || ''}</p>
-              </div>
-              <div className="mt-4">
-                <button
-                  onClick={() => handleEditClick(persona)}
-                  className="mr-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => onDeletePersona(persona.id)}
-                  className="px-4 py-2 bg-gray-50 text-gray-500 rounded hover:bg-gray-300 focus:ring-2 focus:ring-indigo-500"
-                >
-                  <TrashIcon className="w-5 h-5" />
-                </button>
-                <Link
-                  href={`/view-persona?id=${persona.id}`}
-                  className="ml-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                >
-                  View Layout
-                </Link>
-              </div>
-            </li>
-          ))
+                {/* Goals Section */}
+                <div>
+                  <strong className="block mt-2">Goals:</strong>
+                  <ul className="list-disc pl-5">
+                    {(persona.goals || []).map((goal, index) => (
+                      <li key={`goal-${index}`}>{goal}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <strong className="block mt-2">Pain Points:</strong>
+                  <ul className="list-disc pl-5">
+                    {(persona.painPoints || []).map((painPoint, index) => (
+                      <li key={`painPoint-${index}`}>{painPoint}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <strong className="block mt-2">Tasks:</strong>
+                  <ul className="list-disc pl-5">
+                    {(persona.tasks || []).map((task, index) => (
+                      <li key={`task-${index}`}>{task}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <strong className="block mt-2">Functionality:</strong>
+                  <ul className="list-disc pl-5">
+                    {(persona.functionality || []).map((func, index) => (
+                      <li key={`func-${index}`}>{func}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <strong className="block mt-2">Context of Use:</strong>
+                  <p className="pl-5">{persona.contextOfUse || ''}</p>
+                </div>
+                <div className="mt-4 flex items-center gap-2">
+                  <button
+                    onClick={() => handleEditClick(persona)}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => onDeletePersona(persona.id)}
+                    className="px-4 py-2 h-[40px] bg-gray-50 text-gray-500 rounded hover:bg-gray-300 focus:ring-2 focus:ring-indigo-500 flex items-center justify-center"
+                  >
+                    <TrashIcon className="w-5 h-5" />
+                  </button>
+                  <Link
+                    href={`/view-persona?id=${persona.id}`}
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                  >
+                    View Layout
+                  </Link>
+                </div>
+              </li>
+            ))}
+          </ul>
         )}
-      </ul>
+      </div>
     </div>
   );
 };
