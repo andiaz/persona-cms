@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
 
-// Mock router object
 const mockRouter = {
   push: jest.fn(),
   replace: jest.fn(),
@@ -9,17 +8,29 @@ const mockRouter = {
   pathname: '/',
   route: '/',
   asPath: '/',
-  events: {
-    on: jest.fn(),
-    off: jest.fn(),
-    emit: jest.fn(),
-  },
 };
 
-// Mock useRouter hook
+// Mock next/router
 jest.mock('next/router', () => ({
   useRouter: () => mockRouter,
 }));
+
+// Mock next/link
+jest.mock('next/link', () => {
+  return ({ children, href }) => {
+    return (
+      <a
+        href={href}
+        onClick={(e) => {
+          e.preventDefault();
+          mockRouter.push(href);
+        }}
+      >
+        {children}
+      </a>
+    );
+  };
+});
 
 // Mock next/image
 jest.mock('next/image', () => ({

@@ -11,6 +11,7 @@ const PersonaList = ({ personas, onDeletePersona }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false); // Track if dropdown is open
   const dropdownRef = useRef(null);
   const searchInputRef = useRef(null); // Ref for the search input field
+  const [personaSearchQuery, setPersonaSearchQuery] = useState('');
 
   const handleEditClick = (persona) => {
     // Navigate to the add-persona page with the persona ID
@@ -22,15 +23,19 @@ const PersonaList = ({ personas, onDeletePersona }) => {
     new Set(personas.flatMap((persona) => persona.tags || []))
   );
 
-  // Filter tags based on the search query
+  // Filter tags based on the tag search query
   const filteredTags = allTags
     .filter((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-    .sort((a, b) => a.localeCompare(b)); // Sort alphabetically
+    .sort((a, b) => a.localeCompare(b));
 
-  // Filter personas by selected tag
-  const filteredPersonas = selectedTag
-    ? personas.filter((persona) => persona.tags?.includes(selectedTag))
-    : personas;
+  // Filter personas by selected tag and persona search query
+  const filteredPersonas = personas.filter((persona) => {
+    const matchesTag = selectedTag ? persona.tags?.includes(selectedTag) : true;
+    const matchesSearch = personaSearchQuery
+      ? persona.name.toLowerCase().includes(personaSearchQuery.toLowerCase())
+      : true;
+    return matchesTag && matchesSearch;
+  });
 
   useEffect(() => {
     // Close dropdown when clicking outside
@@ -115,6 +120,17 @@ const PersonaList = ({ personas, onDeletePersona }) => {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Add persona search input */}
+      <div className="mt-4">
+        <input
+          type="text"
+          value={personaSearchQuery}
+          onChange={(e) => setPersonaSearchQuery(e.target.value)}
+          placeholder="Search personas..."
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500"
+        />
       </div>
 
       <div className="mt-4">

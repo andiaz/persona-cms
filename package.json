@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:failed": "jest --bail --onlyFailures --verbose"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
