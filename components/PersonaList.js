@@ -59,7 +59,7 @@ const PersonaList = ({ personas, onDeletePersona }) => {
   return (
     <div>
       {/* Custom dropdown for tag filter */}
-      <div className="relative" ref={dropdownRef}>
+      <div className="relative z-40" ref={dropdownRef}>
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)} // Toggle dropdown
           className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 flex items-center justify-center"
@@ -73,7 +73,7 @@ const PersonaList = ({ personas, onDeletePersona }) => {
         </button>
 
         {dropdownOpen && (
-          <div className="absolute left-0 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+          <div className="absolute left-0 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50">
             {/* Search input */}
             <input
               ref={searchInputRef} // Set the ref to the input field
