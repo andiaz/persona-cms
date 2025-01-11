@@ -15,6 +15,11 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
     personaToEdit?.avatarImage || null
   );
   const fileInputRef = useRef(null);
+  const [tagInput, setTagInput] = useState('');
+  const [suggestedTags, setSuggestedTags] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const isHandlingSuggestion = useRef(false);
 
   const router = useRouter();
 
@@ -43,16 +48,83 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
     };
   }, [personaToEdit]);
 
-  const handleAddTag = (e) => {
+  const getAllExistingTags = () => {
+    const personas = JSON.parse(sessionStorage.getItem('personas') || '[]');
+    return Array.from(new Set(personas.flatMap((p) => p.tags || [])));
+  };
+
+  const handleTagInputChange = (e) => {
+    const value = e.target.value;
+    setTagInput(value);
+
+    if (value.trim()) {
+      const existingTags = getAllExistingTags();
+      const filtered = existingTags.filter(
+        (tag) =>
+          tag.toLowerCase().includes(value.toLowerCase()) && !tags.includes(tag)
+      );
+      setSuggestedTags(filtered);
+      setShowSuggestions(true);
+      setSelectedSuggestionIndex(-1);
+    } else {
+      setSuggestedTags([]);
+      setShowSuggestions(false);
+      setSelectedSuggestionIndex(-1);
+    }
+  };
+
+  const handleTagInputKeyDown = (e) => {
+    if (showSuggestions && suggestedTags.length > 0) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedSuggestionIndex((prev) =>
+          prev < suggestedTags.length - 1 ? prev + 1 : prev
+        );
+        return;
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedSuggestionIndex((prev) => (prev > 0 ? prev - 1 : prev));
+        return;
+      }
+      if (
+        (e.key === 'Tab' || e.key === 'Enter') &&
+        selectedSuggestionIndex >= 0
+      ) {
+        e.preventDefault();
+        isHandlingSuggestion.current = true;
+        handleSuggestionClick(suggestedTags[selectedSuggestionIndex]);
+        isHandlingSuggestion.current = false;
+        return;
+      }
+    }
+
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
-      const newTag = e.target.value.trim();
+      const newTag = tagInput.trim();
 
       if (newTag && !tags.includes(newTag)) {
         setTags([...tags, newTag]);
+        setTagInput('');
+        setSuggestedTags([]);
+        setShowSuggestions(false);
+        setSelectedSuggestionIndex(-1);
       }
+    } else if (e.key === 'Backspace' && tagInput === '' && tags.length > 0) {
+      setTags(tags.slice(0, -1));
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false);
+      setSelectedSuggestionIndex(-1);
+    }
+  };
 
-      e.target.value = '';
+  const handleSuggestionClick = (tag) => {
+    if (!tags.includes(tag)) {
+      setTags([...tags, tag]);
+      setTagInput('');
+      setSuggestedTags([]);
+      setShowSuggestions(false);
+      setSelectedSuggestionIndex(-1);
     }
   };
 
@@ -215,31 +287,64 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
 
       <div className="space-y-2">
         <label className="block text-sm font-medium">Tags:</label>
-        <div className="flex flex-wrap items-center gap-2 border px-2 py-2 rounded-md">
+        <div className="flex flex-wrap gap-2 p-2 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-indigo-500">
           {tags.map((tag, index) => (
-            <div
+            <span
               key={index}
-              className="bg-indigo-500 text-white px-3 py-1 rounded-full flex items-center gap-2"
+              className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1"
             >
-              <span>{tag}</span>
+              {tag}
               <button
                 type="button"
                 onClick={() => handleDeleteTag(tag)}
-                className="text-white hover:text-red-400"
+                className="hover:text-red-200"
               >
-                &times;
+                ×
               </button>
-            </div>
+            </span>
           ))}
-          <input
-            type="text"
-            onKeyDown={handleAddTag}
-            placeholder="Press Enter to add a tag"
-            className="flex-grow focus:outline-none"
-          />
+          <div className="relative flex-1 min-w-[120px]">
+            <input
+              type="text"
+              value={tagInput}
+              onChange={handleTagInputChange}
+              onKeyDown={handleTagInputKeyDown}
+              onBlur={() => {
+                if (!isHandlingSuggestion.current) {
+                  setTimeout(() => setShowSuggestions(false), 200);
+                }
+              }}
+              onFocus={() => {
+                if (tagInput.trim()) {
+                  setShowSuggestions(true);
+                }
+              }}
+              placeholder={
+                tags.length === 0 ? 'Type and press Enter to add tags' : ''
+              }
+              className="w-full focus:outline-none"
+            />
+            {showSuggestions && suggestedTags.length > 0 && (
+              <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50">
+                {suggestedTags.map((tag, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => handleSuggestionClick(tag)}
+                    onMouseEnter={() => setSelectedSuggestionIndex(index)}
+                    className={`w-full px-4 py-2 text-left hover:bg-gray-100 ${
+                      selectedSuggestionIndex === index ? 'bg-gray-100' : ''
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <small className="text-gray-500">
-          Type a tag and press Enter or comma to add.
+          Press Enter or comma to add a tag, Backspace to remove the last tag
         </small>
       </div>
 
