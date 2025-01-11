@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import PersonaList from '../components/PersonaList';
-import '../styles/globals.css';
 
 export default function Home() {
   const [personas, setPersonas] = useState([]);

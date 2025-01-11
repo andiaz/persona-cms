@@ -217,7 +217,8 @@ const PersonaList = ({ personas, onDeletePersona }) => {
                   </button>
                   <button
                     onClick={() => onDeletePersona(persona.id)}
-                    className="px-4 py-2 h-[40px] bg-gray-50 text-gray-500 rounded hover:bg-gray-300 focus:ring-2 focus:ring-indigo-500 flex items-center justify-center"
+                    className="px-4 py-2 h-[40px] bg-gray-50 text-gray-500 rounded hover:bg-gray-300"
+                    aria-label="Delete persona"
                   >
                     <TrashIcon className="w-5 h-5" />
                   </button>
