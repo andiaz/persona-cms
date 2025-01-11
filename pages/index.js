@@ -36,17 +36,15 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <div className="flex flex-col gap-2">
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-semibold">Personas</h1>
-        <div>
-          <Link
-            href="/add-persona"
-            className="inline-block px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-          >
-            Add New Persona
-          </Link>
-        </div>
+        <Link
+          href="/add-persona"
+          className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+        >
+          Add New Persona
+        </Link>
       </div>
       <PersonaList
         personas={personas}

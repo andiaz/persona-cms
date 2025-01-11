@@ -17,7 +17,7 @@ jest.mock('next/router', () => ({
 
 // Mock next/link
 jest.mock('next/link', () => {
-  return ({ children, href }) => {
+  const Link = ({ children, href }) => {
     return (
       <a
         href={href}
@@ -30,6 +30,8 @@ jest.mock('next/link', () => {
       </a>
     );
   };
+  Link.displayName = 'Link';
+  return Link;
 });
 
 // Mock next/image

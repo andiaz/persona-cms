@@ -33,15 +33,17 @@ const PersonaLayout = ({ persona }) => {
 
         {/* Right Column - Goals */}
         <div className="flex-1">
-          <h2 className="text-lg sm:text-xl font-semibold mb-3 md:mb-4">
-            Goals (Why)
-          </h2>
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-2xl font-bold">{persona.name}</h2>
+          </div>
           <div className="bg-gray-100 p-3 sm:p-4 rounded-lg min-h-[150px] md:min-h-[200px]">
-            <ul className="list-disc pl-4 space-y-2 text-sm sm:text-base">
+            <div className="space-y-2">
               {persona.goals.map((goal, index) => (
-                <li key={index}>{goal}</li>
+                <div key={index} className="flex items-center gap-2">
+                  {goal}
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -99,11 +101,13 @@ const PersonaLayout = ({ persona }) => {
             Pain points / bright spots
           </h2>
           <div className="bg-gray-100 p-3 sm:p-4 rounded-lg min-h-[150px] md:min-h-[200px]">
-            <ul className="list-disc pl-4 space-y-2 text-sm sm:text-base">
+            <div className="space-y-2">
               {persona.painPoints.map((point, index) => (
-                <li key={index}>{point}</li>
+                <div key={index} className="flex items-center gap-2">
+                  {point}
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
       </div>
