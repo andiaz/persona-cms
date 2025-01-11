@@ -7,9 +7,9 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
   const [goals, setGoals] = useState(['']);
   const [painPoints, setPainPoints] = useState(['']);
   const [contextOfUse, setContextOfUse] = useState('');
-  const [needs, setNeeds] = useState(['']);
-  const [exampleTools, setExampleTools] = useState(['']); // Default to one input field
-  const [tags, setTags] = useState([]); // Tags state
+  const [tasks, setTasks] = useState(['']);
+  const [functionality, setFunctionality] = useState(['']);
+  const [tags, setTags] = useState([]);
 
   const router = useRouter();
 
@@ -18,12 +18,10 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
       setName(personaToEdit.name);
       setGoals(personaToEdit.goals);
       setPainPoints(personaToEdit.painPoints);
-      setContextOfUse(personaToEdit.contextOfUse);
-      setNeeds(personaToEdit.needs);
-      setExampleTools(
-        personaToEdit.exampleTools.length ? personaToEdit.exampleTools : ['']
-      ); // Ensure there's at least one field
-      setTags(personaToEdit.tags || []); // Load existing tags if editing
+      setTasks(personaToEdit.tasks || ['']);
+      setFunctionality(personaToEdit.functionality || ['']);
+      setContextOfUse(personaToEdit.contextOfUse || '');
+      setTags(personaToEdit.tags || []);
     }
   }, [personaToEdit]);
 
@@ -36,7 +34,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
         setTags([...tags, newTag]);
       }
 
-      e.target.value = ''; // Clear input after adding tag
+      e.target.value = '';
     }
   };
 
@@ -49,8 +47,8 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
     const setField = {
       goals: setGoals,
       painPoints: setPainPoints,
-      needs: setNeeds,
-      exampleTools: setExampleTools,
+      tasks: setTasks,
+      functionality: setFunctionality,
     }[fieldName];
 
     setField((prev) => {
@@ -64,8 +62,8 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
     const setField = {
       goals: setGoals,
       painPoints: setPainPoints,
-      needs: setNeeds,
-      exampleTools: setExampleTools,
+      tasks: setTasks,
+      functionality: setFunctionality,
     }[fieldName];
 
     setField((prev) => [...prev, '']);
@@ -75,8 +73,8 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
     const setField = {
       goals: setGoals,
       painPoints: setPainPoints,
-      needs: setNeeds,
-      exampleTools: setExampleTools,
+      tasks: setTasks,
+      functionality: setFunctionality,
     }[fieldName];
 
     setField((prev) => prev.filter((_, i) => i !== index));
@@ -86,37 +84,36 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
     event.preventDefault();
 
     const newPersona = {
-      id: personaToEdit ? personaToEdit.id : Date.now(), // Use existing ID if editing
+      id: personaToEdit ? personaToEdit.id : Date.now(),
       name,
       goals,
       painPoints,
+      tasks,
+      functionality,
       contextOfUse,
-      needs,
-      exampleTools,
       tags,
     };
 
     if (personaToEdit) {
-      onEditPersona(newPersona); // Edit persona
+      onEditPersona(newPersona);
     } else {
-      onAddPersona(newPersona); // Add new persona
+      onAddPersona(newPersona);
     }
 
-    // Only reset the form if it's a new persona being added
     if (!personaToEdit) {
       setName('');
       setGoals(['']);
       setPainPoints(['']);
       setContextOfUse('');
-      setNeeds(['']);
-      setExampleTools(['']);
+      setTasks(['']);
+      setFunctionality(['']);
       setTags([]);
     }
   };
 
   const handleCancel = (event) => {
     event.preventDefault();
-    router.push('/'); // Navigate back to the home page
+    router.push('/');
   };
 
   const shouldShowDeleteButton = (array) => array.length > 1;
@@ -130,7 +127,6 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
         {personaToEdit ? 'Edit Persona' : 'Add a New Persona'}
       </h3>
 
-      {/* Name Field */}
       <div className="space-y-2">
         <label className="block text-sm font-medium">Name:</label>
         <input
@@ -142,7 +138,6 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
         />
       </div>
 
-      {/* Tag Input */}
       <div className="space-y-2">
         <label className="block text-sm font-medium">Tags:</label>
         <div className="flex flex-wrap items-center gap-2 border px-2 py-2 rounded-md">
@@ -173,7 +168,6 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
         </small>
       </div>
 
-      {/* Goals */}
       <div className="space-y-2">
         <label className="block text-sm font-medium">Goals:</label>
         {goals.map((goal, index) => (
@@ -208,7 +202,6 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
         ))}
       </div>
 
-      {/* Pain Points */}
       <div className="space-y-2">
         <label className="block text-sm font-medium">Pain Points:</label>
         {painPoints.map((painPoint, index) => (
@@ -243,77 +236,85 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
         ))}
       </div>
 
-      {/* Needs */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium">Needs:</label>
-        {needs.map((need, index) => (
-          <div key={`need-${index}`} className="space-y-2">
+        <label className="block text-sm font-medium">Tasks:</label>
+        {tasks.map((task, index) => (
+          <div key={`task-${index}`} className="space-y-2">
             <input
               type="text"
-              value={need}
-              onChange={(e) => handleInputChange(e, index, 'needs')}
-              placeholder="Enter a need"
+              value={task}
+              onChange={(e) => handleInputChange(e, index, 'tasks')}
+              placeholder="Enter a task"
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
             />
-            {index === needs.length - 1 && (
+            {index === tasks.length - 1 && (
               <button
                 type="button"
-                onClick={() => handleAddField('needs')}
+                onClick={() => handleAddField('tasks')}
                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
               >
-                Add Need
+                Add Task
               </button>
             )}
-            {shouldShowDeleteButton(needs) && (
+            {shouldShowDeleteButton(tasks) && (
               <button
                 type="button"
-                onClick={() => handleDeleteField(index, 'needs')}
+                onClick={() => handleDeleteField(index, 'tasks')}
                 className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
               >
-                Delete Need
+                Delete Task
               </button>
             )}
           </div>
         ))}
       </div>
 
-      {/* Example Tools */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium">Example Tools:</label>
-        {exampleTools.map((tool, index) => (
-          <div key={`tool-${index}`} className="space-y-2">
+        <label className="block text-sm font-medium">Context of Use:</label>
+        <textarea
+          value={contextOfUse}
+          onChange={(e) => setContextOfUse(e.target.value)}
+          placeholder="Enter context of use"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
+          rows={4}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">Functionality:</label>
+        {functionality.map((func, index) => (
+          <div key={`functionality-${index}`} className="space-y-2">
             <input
               type="text"
-              value={tool}
-              onChange={(e) => handleInputChange(e, index, 'exampleTools')}
-              placeholder="Enter an example tool"
+              value={func}
+              onChange={(e) => handleInputChange(e, index, 'functionality')}
+              placeholder="Enter functionality"
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
             />
-            {index === exampleTools.length - 1 && (
+            {index === functionality.length - 1 && (
               <button
                 type="button"
-                onClick={() => handleAddField('exampleTools')}
+                onClick={() => handleAddField('functionality')}
                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
               >
-                Add Tool
+                Add Functionality
               </button>
             )}
-            {shouldShowDeleteButton(exampleTools) && (
+            {shouldShowDeleteButton(functionality) && (
               <button
                 type="button"
-                onClick={() => handleDeleteField(index, 'exampleTools')}
+                onClick={() => handleDeleteField(index, 'functionality')}
                 className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
               >
-                Delete Tool
+                Delete Functionality
               </button>
             )}
           </div>
         ))}
       </div>
 
-      {/* Submit Button */}
       <div className="text-center">
         <button
           type="submit"

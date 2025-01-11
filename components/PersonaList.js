@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'; // Import Heroicons
+import Link from 'next/link';
 
 const PersonaList = ({ personas, onDeletePersona }) => {
   const router = useRouter();
@@ -129,7 +130,7 @@ const PersonaList = ({ personas, onDeletePersona }) => {
               <div className="mt-2">
                 <strong className="block">Tags:</strong>
                 <div className="flex flex-wrap gap-2 mt-1">
-                  {persona.tags && persona.tags.length > 0 ? (
+                  {(persona.tags || []).length > 0 ? (
                     persona.tags.map((tag, index) => (
                       <span
                         key={`tag-${index}`}
@@ -149,7 +150,7 @@ const PersonaList = ({ personas, onDeletePersona }) => {
               <div>
                 <strong className="block mt-2">Goals:</strong>
                 <ul className="list-disc pl-5">
-                  {persona.goals.map((goal, index) => (
+                  {(persona.goals || []).map((goal, index) => (
                     <li key={`goal-${index}`}>{goal}</li>
                   ))}
                 </ul>
@@ -157,26 +158,30 @@ const PersonaList = ({ personas, onDeletePersona }) => {
               <div>
                 <strong className="block mt-2">Pain Points:</strong>
                 <ul className="list-disc pl-5">
-                  {persona.painPoints.map((painPoint, index) => (
+                  {(persona.painPoints || []).map((painPoint, index) => (
                     <li key={`painPoint-${index}`}>{painPoint}</li>
                   ))}
                 </ul>
               </div>
               <div>
-                <strong className="block mt-2">Needs:</strong>
+                <strong className="block mt-2">Tasks:</strong>
                 <ul className="list-disc pl-5">
-                  {persona.needs.map((need, index) => (
-                    <li key={`need-${index}`}>{need}</li>
+                  {(persona.tasks || []).map((task, index) => (
+                    <li key={`task-${index}`}>{task}</li>
                   ))}
                 </ul>
               </div>
               <div>
-                <strong className="block mt-2">Example Tools:</strong>
+                <strong className="block mt-2">Functionality:</strong>
                 <ul className="list-disc pl-5">
-                  {persona.exampleTools.map((tool, index) => (
-                    <li key={`tool-${index}`}>{tool}</li>
+                  {(persona.functionality || []).map((func, index) => (
+                    <li key={`func-${index}`}>{func}</li>
                   ))}
                 </ul>
+              </div>
+              <div>
+                <strong className="block mt-2">Context of Use:</strong>
+                <p className="pl-5">{persona.contextOfUse || ''}</p>
               </div>
               <div className="mt-4">
                 <button
@@ -191,6 +196,12 @@ const PersonaList = ({ personas, onDeletePersona }) => {
                 >
                   <TrashIcon className="w-5 h-5" />
                 </button>
+                <Link
+                  href={`/view-persona?id=${persona.id}`}
+                  className="ml-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                >
+                  View Layout
+                </Link>
               </div>
             </li>
           ))
