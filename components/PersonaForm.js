@@ -1,6 +1,7 @@
 // components/PersonaForm.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
   const [name, setName] = useState('');
@@ -10,6 +11,10 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
   const [tasks, setTasks] = useState(['']);
   const [functionality, setFunctionality] = useState(['']);
   const [tags, setTags] = useState([]);
+  const [avatarImage, setAvatarImage] = useState(
+    personaToEdit?.avatarImage || null
+  );
+  const fileInputRef = useRef(null);
 
   const router = useRouter();
 
@@ -22,7 +27,20 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
       setFunctionality(personaToEdit.functionality || ['']);
       setContextOfUse(personaToEdit.contextOfUse || '');
       setTags(personaToEdit.tags || []);
+      setAvatarImage(personaToEdit.avatarImage || null);
     }
+
+    // Cleanup function
+    return () => {
+      setName('');
+      setGoals(['']);
+      setPainPoints(['']);
+      setTasks(['']);
+      setFunctionality(['']);
+      setContextOfUse('');
+      setTags([]);
+      setAvatarImage(null);
+    };
   }, [personaToEdit]);
 
   const handleAddTag = (e) => {
@@ -80,6 +98,17 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
     setField((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -92,6 +121,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
       functionality,
       contextOfUse,
       tags,
+      avatarImage,
     };
 
     if (personaToEdit) {
@@ -136,6 +166,51 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
           required
           className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
         />
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">Avatar Image:</label>
+        <div className="flex items-center gap-4">
+          <div className="relative w-32 h-32 bg-gray-200 rounded-full overflow-hidden">
+            {avatarImage ? (
+              <Image
+                src={avatarImage}
+                alt="Avatar preview"
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                No image
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col gap-2">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageUpload}
+              accept="image/*"
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
+              Upload Image
+            </button>
+            {avatarImage && (
+              <button
+                type="button"
+                onClick={() => setAvatarImage(null)}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                Remove Image
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="space-y-2">

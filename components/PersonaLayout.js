@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const PersonaLayout = ({ persona }) => {
   if (!persona) return null;
@@ -9,8 +10,19 @@ const PersonaLayout = ({ persona }) => {
       <div className="flex flex-col md:flex-row gap-6 md:gap-8 mb-6 md:mb-8">
         {/* Left Column - Avatar & Name */}
         <div className="flex md:flex-col items-center gap-4 md:w-64">
-          <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 bg-gray-200 rounded-full shrink-0">
-            {/* Avatar placeholder */}
+          <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 bg-gray-200 rounded-full shrink-0 overflow-hidden">
+            {persona.avatarImage ? (
+              <Image
+                src={persona.avatarImage}
+                alt={`${persona.name}'s avatar`}
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                No image
+              </div>
+            )}
           </div>
           <div className="flex-1 md:flex-none w-full md:w-48 h-12 bg-blue-600 flex items-center justify-center">
             <span className="text-white font-medium text-sm sm:text-base">

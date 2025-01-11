@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'; // Import Heroicons
 import Link from 'next/link';
+import Image from 'next/image';
 
 const PersonaList = ({ personas, onDeletePersona }) => {
   const router = useRouter();
@@ -125,7 +126,23 @@ const PersonaList = ({ personas, onDeletePersona }) => {
               key={persona.id}
               className="p-4 border rounded-lg shadow-md hover:shadow-lg transition duration-200"
             >
-              <h3 className="text-xl font-semibold">{persona.name}</h3>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="relative w-16 h-16 bg-gray-200 rounded-full overflow-hidden shrink-0">
+                  {persona.avatarImage ? (
+                    <Image
+                      src={persona.avatarImage}
+                      alt={`${persona.name}'s avatar`}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm text-center">
+                      No image
+                    </div>
+                  )}
+                </div>
+                <h3 className="text-xl font-semibold">{persona.name}</h3>
+              </div>
               {/* Tags Section */}
               <div className="mt-2">
                 <strong className="block">Tags:</strong>
