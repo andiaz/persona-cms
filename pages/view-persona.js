@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import html2canvas from 'html2canvas';
 import { getPersonaById } from '../lib/storage';
 import {
@@ -70,6 +71,12 @@ export default function ViewPersona() {
           <p className="text-sm text-slate-500 mt-1">View and export persona</p>
         </div>
         <div className="flex items-center gap-2">
+          <Link
+            href={`/add-persona?id=${id}`}
+            className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
+          >
+            Edit
+          </Link>
           <button
             onClick={exportAsPNG}
             className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"

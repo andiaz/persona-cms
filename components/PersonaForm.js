@@ -250,6 +250,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
           onChange={(e) => setName(e.target.value)}
           className="w-full px-4 py-2 border border-gray-300 rounded-md"
           required
+          autoFocus
           data-testid="name-input"
         />
       </div>

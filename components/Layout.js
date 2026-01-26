@@ -24,12 +24,13 @@ export default function Layout({ children }) {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Navigation Header */}
-      <header className="bg-white border-b border-slate-200">
+      <header className="bg-gradient-to-r from-slate-800 to-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             {/* Logo / App Name */}
-            <Link href="/" className="text-lg font-semibold text-slate-900">
-              Persona CMS
+            <Link href="/" className="text-lg font-semibold text-white flex items-center gap-2">
+              <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-sm">P</span>
+              Persona Lab
             </Link>
 
             {/* Navigation */}
@@ -40,8 +41,8 @@ export default function Layout({ children }) {
                   href={item.href}
                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                     isActive(item.href)
-                      ? 'bg-slate-100 text-slate-900'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                      ? 'bg-white/20 text-white'
+                      : 'text-slate-300 hover:text-white hover:bg-white/10'
                   }`}
                 >
                   {item.label}

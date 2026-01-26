@@ -200,7 +200,11 @@ export default function Home() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900">Personas</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage your user personas</p>
+          <p className="text-sm text-slate-500 mt-1">
+            {personas.length === 0
+              ? 'Create your first user persona'
+              : `${personas.length} persona${personas.length !== 1 ? 's' : ''} in your library`}
+          </p>
         </div>
         <div className="flex gap-2 flex-wrap">
           <button

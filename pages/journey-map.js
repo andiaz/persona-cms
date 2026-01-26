@@ -137,8 +137,8 @@ export default function JourneyMapPage() {
 
   return (
     <div>
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-14 z-20">
+      {/* Toolbar */}
+      <div className="bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             {/* Left side */}
@@ -242,7 +242,7 @@ export default function JourneyMapPage() {
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
