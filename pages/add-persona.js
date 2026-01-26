@@ -1,34 +1,32 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import PersonaForm from '../components/PersonaForm';
+import {
+  getPersonaById,
+  addPersona as storageAddPersona,
+  updatePersona as storageUpdatePersona,
+} from '../lib/storage';
 
 const AddPersonaPage = () => {
   const [personaToEdit, setPersonaToEdit] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
-    // If editing, get the persona to edit from the URL (or from sessionStorage)
+    // If editing, get the persona to edit from storage
     const { id } = router.query;
     if (id) {
-      const personas = JSON.parse(sessionStorage.getItem('personas') || '[]');
-      const persona = personas.find((p) => p.id === parseInt(id));
+      const persona = getPersonaById(parseInt(id));
       setPersonaToEdit(persona);
     }
   }, [router.query]);
 
   const addPersona = (newPersona) => {
-    const personas = JSON.parse(sessionStorage.getItem('personas') || '[]');
-    const updatedPersonas = [...personas, newPersona];
-    sessionStorage.setItem('personas', JSON.stringify(updatedPersonas));
+    storageAddPersona({ ...newPersona, id: Date.now() });
     router.push('/'); // Redirect to home page after adding persona
   };
 
   const editPersona = (updatedPersona) => {
-    const personas = JSON.parse(sessionStorage.getItem('personas') || '[]');
-    const updatedPersonas = personas.map((persona) =>
-      persona.id === updatedPersona.id ? updatedPersona : persona
-    );
-    sessionStorage.setItem('personas', JSON.stringify(updatedPersonas));
+    storageUpdatePersona(updatedPersona);
     router.push('/'); // Redirect to home page after editing persona
   };
 

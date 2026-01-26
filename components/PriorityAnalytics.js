@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
 
+const getPriorityLabel = (priority) => {
+  const labels = ['low', 'low', 'medium', 'high', 'critical'];
+  return labels[priority] || 'low';
+};
+
 const PriorityAnalytics = ({ personas }) => {
   const [stats, setStats] = useState({
     criticalGoals: 0,
@@ -59,3 +64,5 @@ const PriorityAnalytics = ({ personas }) => {
     </div>
   );
 };
+
+export default PriorityAnalytics;

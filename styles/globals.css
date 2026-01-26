@@ -2,3 +2,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Print styles */
+@media print {
+  /* Hide navigation and controls when printing */
+  .no-print,
+  nav,
+  button,
+  a[href="/"] {
+    display: none !important;
+  }
+
+  /* Remove background colors that waste ink */
+  body {
+    background: white !important;
+  }
+
+  /* Ensure persona layout takes full width */
+  #persona-layout {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* Page settings */
+  @page {
+    margin: 1cm;
+    size: A4;
+  }
+}

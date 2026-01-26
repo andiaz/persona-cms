@@ -1,6 +1,16 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import PersonaList from '../components/PersonaList';
+import React from 'react';
+import {
+  getPersonas,
+  addPersona as storageAddPersona,
+  deletePersona as storageDeletePersona,
+  updatePersona as storageUpdatePersona,
+  exportAllData,
+  importData,
+  migrateFromSessionStorage,
+} from '../lib/storage';
 
 const generateTestPersona = () => {
   const id = Date.now();
@@ -124,59 +134,110 @@ const generateTestPersona = () => {
 
 export default function Home() {
   const [personas, setPersonas] = useState([]);
+  const fileInputRef = React.useRef(null);
 
   useEffect(() => {
-    // Load personas from sessionStorage when the app is loaded
-    const savedPersonas = sessionStorage.getItem('personas');
-    if (savedPersonas) {
-      setPersonas(JSON.parse(savedPersonas));
-    }
+    // Migrate from sessionStorage if needed (one-time)
+    migrateFromSessionStorage();
+    // Load personas from localStorage
+    setPersonas(getPersonas());
   }, []);
 
   const editPersona = (updatedPersona) => {
-    const updatedPersonas = personas.map((persona) =>
-      persona.id === updatedPersona.id ? updatedPersona : persona
-    );
-    setPersonas(updatedPersonas);
-    sessionStorage.setItem('personas', JSON.stringify(updatedPersonas)); // Save to sessionStorage
+    storageUpdatePersona(updatedPersona);
+    setPersonas(getPersonas());
   };
 
   const deletePersona = (id) => {
-    const updatedPersonas = personas.filter((persona) => persona.id !== id);
-    setPersonas(updatedPersonas);
-    sessionStorage.setItem('personas', JSON.stringify(updatedPersonas)); // Save to sessionStorage
+    storageDeletePersona(id);
+    setPersonas(getPersonas());
   };
 
   const addPersona = (newPersona) => {
-    const personas = JSON.parse(sessionStorage.getItem('personas') || '[]');
-    sessionStorage.setItem(
-      'personas',
-      JSON.stringify([...personas, newPersona])
-    );
+    storageAddPersona(newPersona);
+    setPersonas(getPersonas());
   };
 
   const handleGenerateTest = () => {
     const newPersona = generateTestPersona();
-    const updatedPersonas = [...personas, newPersona];
-    setPersonas(updatedPersonas);
-    sessionStorage.setItem('personas', JSON.stringify(updatedPersonas));
+    storageAddPersona(newPersona);
+    setPersonas(getPersonas());
+  };
+
+  const handleExport = () => {
+    const blob = exportAllData();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `personas-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        const result = importData(data, { merge: true });
+        setPersonas(getPersonas());
+        alert(`Imported ${result.personas} personas and ${result.journeyMaps} journey maps.`);
+      } catch (error) {
+        alert('Failed to import: ' + error.message);
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = ''; // Reset input
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-semibold">Personas</h1>
-        <div className="flex gap-4">
+        <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={handleExport}
+            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+            title="Export all data as JSON backup"
+          >
+            Export
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImport}
+            accept=".json"
+            className="hidden"
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+            title="Import data from JSON backup"
+          >
+            Import
+          </button>
+          <Link
+            href="/journey-maps"
+            className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+            title="View and create journey maps"
+          >
+            Journey Maps
+          </Link>
           <button
             onClick={handleGenerateTest}
-            className="px-6 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600"
+            className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600"
             title="Generate a test persona with sample data"
           >
             Generate Test
           </button>
           <Link
             href="/add-persona"
-            className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
           >
             Add New Persona
           </Link>

@@ -8,6 +8,16 @@ describe('PersonaForm', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Mock localStorage for tag suggestions
+    const mockStorage = {
+      getItem: jest.fn(() => '[]'),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+    };
+    Object.defineProperty(window, 'localStorage', {
+      value: mockStorage,
+      writable: true,
+    });
   });
 
   it('renders form fields correctly', () => {

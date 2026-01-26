@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { getAllTags } from '../lib/storage';
 
 const PrioritySelect = ({ value, onChange, label }) => (
   <div className="flex items-center gap-2">
@@ -69,8 +70,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
   }, [personaToEdit]);
 
   const getAllExistingTags = () => {
-    const personas = JSON.parse(sessionStorage.getItem('personas') || '[]');
-    return Array.from(new Set(personas.flatMap((p) => p.tags || [])));
+    return getAllTags();
   };
 
   const handleTagInputChange = (e) => {
