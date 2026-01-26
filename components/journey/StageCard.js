@@ -168,51 +168,27 @@ export default function StageCard({
                 const emotionInfo = getEmotionInfo(emotionValue);
                 return (
                   <div key={persona.id} className="space-y-1.5">
-                    <div style={{ display: 'table', width: '100%' }}>
-                      <span
-                        style={{
-                          display: 'table-cell',
-                          verticalAlign: 'middle',
-                          width: '18px'
-                        }}
-                      >
+                    <div style={{ fontSize: '12px', lineHeight: '24px' }}>
+                        <svg width="10" height="24" style={{ display: 'inline-block', verticalAlign: 'top', marginRight: '8px' }}>
+                          <circle cx="5" cy="12" r="5" fill={personaColors[idx % personaColors.length]} />
+                        </svg>
                         <span
+                          className="font-medium text-slate-600"
                           style={{
+                            maxWidth: '100px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
                             display: 'inline-block',
-                            width: '10px',
-                            height: '10px',
-                            borderRadius: '50%',
-                            backgroundColor: personaColors[idx % personaColors.length]
+                            verticalAlign: 'top'
                           }}
-                        />
-                      </span>
-                      <span
-                        className="font-medium text-slate-600"
-                        style={{
-                          display: 'table-cell',
-                          verticalAlign: 'middle',
-                          fontSize: '12px',
-                          lineHeight: '24px',
-                          maxWidth: '120px',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap'
-                        }}
-                      >
-                        {persona.name}
-                      </span>
-                      <span
-                        style={{
-                          display: 'table-cell',
-                          verticalAlign: 'middle',
-                          textAlign: 'right',
-                          width: '90px'
-                        }}
-                      >
+                        >
+                          {persona.name}
+                        </span>
                         <span
                           className="font-medium"
                           style={{
-                            display: 'inline-block',
+                            float: 'right',
                             fontSize: '12px',
                             lineHeight: '20px',
                             padding: '2px 8px',
@@ -224,7 +200,6 @@ export default function StageCard({
                         >
                           {emotionInfo.label}
                         </span>
-                      </span>
                     </div>
                     {/* Emotion slider - hidden during export */}
                     {!isExporting && (
@@ -263,36 +238,32 @@ export default function StageCard({
                   <div
                     key={tp.id}
                     className="bg-slate-50 px-3 py-2 rounded-lg text-sm group"
-                    style={{ display: 'table', width: '100%' }}
+                    style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}
                   >
                     <span
-                      className="bg-blue-100 rounded"
+                      className="bg-blue-100 rounded flex-shrink-0"
                       style={{
-                        display: 'table-cell',
-                        verticalAlign: 'top',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         width: '24px',
                         height: '24px',
-                        textAlign: 'center',
-                        fontSize: '14px',
-                        lineHeight: '24px'
+                        fontSize: '14px'
                       }}
                     >
                       {channel?.icon || '📌'}
                     </span>
-                    <span style={{ display: 'table-cell', width: '8px' }} />
-                    <span style={{ display: 'table-cell', verticalAlign: 'top' }}>
+                    <span style={{ flex: 1, minWidth: 0 }}>
                       <span className="text-slate-700" style={{ display: 'block', lineHeight: '20px' }}>{tp.description}</span>
                       <span className="text-slate-400" style={{ display: 'block', fontSize: '12px', lineHeight: '16px' }}>{channel?.label}</span>
                     </span>
                     {!isExporting && (
-                      <span style={{ display: 'table-cell', verticalAlign: 'top', width: '20px', textAlign: 'right' }}>
-                        <button
-                          onClick={() => handleRemoveTouchpoint(tp.id)}
-                          className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          ×
-                        </button>
-                      </span>
+                      <button
+                        onClick={() => handleRemoveTouchpoint(tp.id)}
+                        className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                      >
+                        ×
+                      </button>
                     )}
                   </div>
                 );
@@ -349,19 +320,19 @@ export default function StageCard({
                 <div
                   key={index}
                   className="bg-red-50 border border-red-100 px-3 py-2 rounded-lg text-sm group"
-                  style={{ display: 'table', width: '100%' }}
+                  style={{ lineHeight: '20px' }}
                 >
-                  <span className="text-red-400" style={{ display: 'table-cell', verticalAlign: 'top', width: '16px', lineHeight: '20px' }}>●</span>
-                  <span className="text-slate-700" style={{ display: 'table-cell', verticalAlign: 'top', lineHeight: '20px' }}>{pp}</span>
+                  <svg width="8" height="20" style={{ display: 'inline-block', verticalAlign: 'top', marginRight: '8px' }}>
+                    <circle cx="4" cy="10" r="4" fill="#f87171" />
+                  </svg>
+                  <span className="text-slate-700" style={{ verticalAlign: 'top' }}>{pp}</span>
                   {!isExporting && (
-                    <span style={{ display: 'table-cell', verticalAlign: 'top', width: '20px', textAlign: 'right' }}>
-                      <button
-                        onClick={() => handleRemovePainPoint(index)}
-                        className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        ×
-                      </button>
-                    </span>
+                    <button
+                      onClick={() => handleRemovePainPoint(index)}
+                      className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity float-right"
+                    >
+                      ×
+                    </button>
                   )}
                 </div>
               ))
@@ -423,19 +394,19 @@ export default function StageCard({
                 <div
                   key={index}
                   className="bg-emerald-50 border border-emerald-100 px-3 py-2 rounded-lg text-sm group"
-                  style={{ display: 'table', width: '100%' }}
+                  style={{ lineHeight: '20px' }}
                 >
-                  <span className="text-emerald-400" style={{ display: 'table-cell', verticalAlign: 'top', width: '16px', lineHeight: '20px' }}>●</span>
-                  <span className="text-slate-700" style={{ display: 'table-cell', verticalAlign: 'top', lineHeight: '20px' }}>{opp}</span>
+                  <svg width="8" height="20" style={{ display: 'inline-block', verticalAlign: 'top', marginRight: '8px' }}>
+                    <circle cx="4" cy="10" r="4" fill="#34d399" />
+                  </svg>
+                  <span className="text-slate-700" style={{ verticalAlign: 'top' }}>{opp}</span>
                   {!isExporting && (
-                    <span style={{ display: 'table-cell', verticalAlign: 'top', width: '20px', textAlign: 'right' }}>
-                      <button
-                        onClick={() => handleRemoveOpportunity(index)}
-                        className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        ×
-                      </button>
-                    </span>
+                    <button
+                      onClick={() => handleRemoveOpportunity(index)}
+                      className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity float-right"
+                    >
+                      ×
+                    </button>
                   )}
                 </div>
               ))

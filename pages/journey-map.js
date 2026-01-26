@@ -256,16 +256,15 @@ export default function JourneyMapPage() {
         <div ref={mapRef} className="space-y-8">
           {/* Persona Legend */}
           {linkedPersonas.length > 0 && (
-            <div className="flex items-center gap-6 text-sm">
-              <span className="text-slate-500 font-medium">Tracking:</span>
+            <div style={{ fontSize: '14px', lineHeight: '20px' }}>
+              <span className="text-slate-500 font-medium" style={{ marginRight: '24px' }}>Tracking:</span>
               {linkedPersonas.map((persona, idx) => (
-                <div key={persona.id} className="flex items-center gap-2">
-                  <span
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: PERSONA_COLORS[idx % PERSONA_COLORS.length] }}
-                  />
+                <span key={persona.id} style={{ marginRight: '24px' }}>
+                  <svg width="12" height="20" style={{ display: 'inline-block', verticalAlign: 'top', marginRight: '8px' }}>
+                    <circle cx="6" cy="10" r="6" fill={PERSONA_COLORS[idx % PERSONA_COLORS.length]} />
+                  </svg>
                   <span className="text-slate-700">{persona.name}</span>
-                </div>
+                </span>
               ))}
             </div>
           )}

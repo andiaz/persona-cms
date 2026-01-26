@@ -268,16 +268,17 @@ export default function EmotionGraph({ stages, personas, colors }) {
       </div>
 
       {/* Legend */}
-      <div className="px-4 py-3 border-t border-slate-100 bg-slate-50 flex flex-wrap gap-4">
-        {personas.map((persona, idx) => (
-          <div key={persona.id} className="flex items-center gap-2">
-            <div
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: colors[idx % colors.length] }}
-            />
-            <span className="text-xs font-medium text-slate-600">{persona.name}</span>
-          </div>
-        ))}
+      <div className="px-4 py-3 border-t border-slate-100 bg-slate-50">
+        <div style={{ fontSize: '12px', lineHeight: '20px' }}>
+          {personas.map((persona, idx) => (
+            <span key={persona.id} style={{ marginRight: '16px' }}>
+              <svg width="12" height="20" style={{ display: 'inline-block', verticalAlign: 'top', marginRight: '8px' }}>
+                <circle cx="6" cy="10" r="6" fill={colors[idx % colors.length]} />
+              </svg>
+              <span className="font-medium text-slate-600">{persona.name}</span>
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
