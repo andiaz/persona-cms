@@ -262,7 +262,7 @@ const PersonaList = ({ personas, onDeletePersona }) => {
               {filteredPersonas.map((persona) => (
                 <li
                   key={persona.id}
-                  className="p-4 bg-white border border-slate-200 rounded-xl hover:border-slate-300 transition duration-200 h-full"
+                  className="p-4 bg-white border border-slate-200 rounded-xl hover:border-slate-300 transition duration-200 h-full flex flex-col"
                 >
                   <div className="flex items-center gap-4 mb-4">
                     <Link
@@ -351,7 +351,7 @@ const PersonaList = ({ personas, onDeletePersona }) => {
                     <strong className="block mt-2">Context of Use:</strong>
                     <p className="pl-5">{persona.contextOfUse || ''}</p>
                   </div>
-                  <div className="mt-4 flex items-center gap-2">
+                  <div className="mt-auto pt-4 flex items-center gap-2">
                     <Link
                       href={`/view-persona?id=${persona.id}`}
                       className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"

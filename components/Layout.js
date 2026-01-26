@@ -59,18 +59,31 @@ export default function Layout({ children }) {
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-white py-4 mt-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-xs text-slate-400 text-center">
-            Avatars powered by{' '}
-            <a
-              href="https://dicebear.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-500 hover:text-slate-700 underline"
-            >
-              DiceBear
-            </a>
-            {' '}(CC BY 4.0 / MIT)
-          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+            <p className="text-xs text-slate-400">
+              Made by{' '}
+              <a
+                href="https://andreasjohanssonux.netlify.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-500 hover:text-slate-700 underline"
+              >
+                Andreas Johansson
+              </a>
+            </p>
+            <span className="hidden sm:inline text-slate-300">|</span>
+            <p className="text-xs text-slate-400">
+              Avatars by{' '}
+              <a
+                href="https://dicebear.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-500 hover:text-slate-700 underline"
+              >
+                DiceBear
+              </a>
+            </p>
+          </div>
         </div>
       </footer>
     </div>

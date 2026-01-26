@@ -213,7 +213,17 @@ export default function JourneyMapPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             {/* Left side */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              {/* Back button */}
+              <Link
+                href="/journey-maps"
+                className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors"
+                title="Back to Journey Maps"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </Link>
               {/* Editable title */}
               {editingName ? (
                 <input
@@ -226,13 +236,18 @@ export default function JourneyMapPage() {
                   autoFocus
                 />
               ) : (
-                <h1
-                  className="text-lg font-semibold text-slate-900 cursor-pointer hover:text-blue-600 transition-colors"
+                <button
                   onClick={() => setEditingName(true)}
-                  title="Click to edit"
+                  className="flex items-center gap-2 group"
+                  title="Click to rename"
                 >
-                  {journeyMap.name}
-                </h1>
+                  <h1 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    {journeyMap.name}
+                  </h1>
+                  <svg className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </button>
               )}
             </div>
 
@@ -278,10 +293,7 @@ export default function JourneyMapPage() {
                     <div className="max-h-64 overflow-y-auto p-2">
                       {personas.length === 0 ? (
                         <p className="p-3 text-sm text-slate-500 text-center">
-                          No personas yet.{' '}
-                          <Link href="/add-persona" className="text-blue-500 hover:underline">
-                            Create one
-                          </Link>
+                          No personas yet.
                         </p>
                       ) : (
                         personas.map((persona, idx) => (
@@ -315,6 +327,17 @@ export default function JourneyMapPage() {
                         ))
                       )}
                     </div>
+                    <div className="p-2 border-t border-slate-100">
+                      <Link
+                        href={`/add-persona?from=journey-map&mapId=${id}`}
+                        className="flex items-center gap-2 p-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                        Create New Persona
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>
@@ -340,6 +363,13 @@ export default function JourneyMapPage() {
               >
                 Export PNG
               </button>
+
+              <Link
+                href="/journey-maps"
+                className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
+              >
+                Done
+              </Link>
             </div>
           </div>
         </div>

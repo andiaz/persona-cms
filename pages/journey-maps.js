@@ -21,7 +21,19 @@ export default function JourneyMapsPage() {
   useEffect(() => {
     setJourneyMaps(getJourneyMaps());
     setPersonas(getPersonas());
-  }, []);
+
+    // Check if returning from creating a persona
+    const { newPersona } = router.query;
+    if (newPersona) {
+      const personaId = parseInt(newPersona);
+      // Auto-open modal with the new persona pre-selected
+      setNewMapName(`Journey Map ${getJourneyMaps().length + 1}`);
+      setSelectedPersonaIds([personaId]);
+      setShowCreateModal(true);
+      // Clean up the URL
+      router.replace('/journey-maps', undefined, { shallow: true });
+    }
+  }, [router.query]);
 
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this journey map?')) {
@@ -194,36 +206,52 @@ export default function JourneyMapsPage() {
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 Link Personas (optional)
               </label>
-              {personas.length === 0 ? (
-                <div className="text-center py-4 border border-slate-200 rounded-lg bg-slate-50">
-                  <p className="text-sm text-slate-500 mb-2">
-                    No personas available yet.
-                  </p>
-                  <Link
-                    href="/add-persona"
-                    className="text-sm font-medium text-slate-800 hover:text-slate-900 underline"
-                  >
-                    Create a persona first
-                  </Link>
-                </div>
-              ) : (
-                <div className="max-h-40 overflow-y-auto border border-slate-200 rounded-lg">
-                  {personas.map((persona) => (
-                    <label
-                      key={persona.id}
-                      className="flex items-center gap-3 p-2.5 hover:bg-slate-50 cursor-pointer text-sm"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedPersonaIds.includes(persona.id)}
-                        onChange={() => togglePersonaSelection(persona.id)}
-                        className="w-4 h-4 text-slate-800 rounded border-slate-300"
-                      />
-                      <span className="text-slate-700">{persona.name}</span>
-                    </label>
-                  ))}
-                </div>
-              )}
+              <div className="border border-slate-200 rounded-lg overflow-hidden">
+                {personas.length === 0 ? (
+                  <div className="text-center py-4 bg-slate-50">
+                    <p className="text-sm text-slate-500 mb-2">
+                      No personas available yet.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="max-h-40 overflow-y-auto">
+                    {personas.map((persona) => (
+                      <label
+                        key={persona.id}
+                        className="flex items-center gap-3 p-2.5 hover:bg-slate-50 cursor-pointer text-sm"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedPersonaIds.includes(persona.id)}
+                          onChange={() => togglePersonaSelection(persona.id)}
+                          className="w-4 h-4 text-slate-800 rounded border-slate-300"
+                        />
+                        {persona.avatarImage ? (
+                          <img
+                            src={persona.avatarImage}
+                            alt={persona.name}
+                            className="w-6 h-6 rounded-full object-cover"
+                          />
+                        ) : (
+                          <span className="w-6 h-6 rounded-full bg-slate-300 flex items-center justify-center text-xs text-white">
+                            {persona.name?.charAt(0) || '?'}
+                          </span>
+                        )}
+                        <span className="text-slate-700">{persona.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+                <Link
+                  href="/add-persona?from=journey-maps"
+                  className="flex items-center gap-2 p-2.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-t border-slate-200 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Create New Persona
+                </Link>
+              </div>
             </div>
 
             {/* Actions */}
