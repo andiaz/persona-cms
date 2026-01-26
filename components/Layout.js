@@ -15,6 +15,9 @@ export default function Layout({ children }) {
     if (href === '/') {
       return currentPath === '/' || currentPath === '/add-persona' || currentPath === '/view-persona';
     }
+    if (href === '/journey-maps') {
+      return currentPath === '/journey-maps' || currentPath === '/journey-map';
+    }
     return currentPath.startsWith(href);
   };
 

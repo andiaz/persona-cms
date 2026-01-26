@@ -239,7 +239,7 @@ const PersonaList = ({ personas, onDeletePersona }) => {
               {filteredPersonas.map((persona) => (
                 <li
                   key={persona.id}
-                  className="p-4 border rounded-lg shadow-md hover:shadow-lg transition duration-200 h-full"
+                  className="p-4 bg-white border border-slate-200 rounded-xl hover:border-slate-300 transition duration-200 h-full"
                 >
                   <div className="flex items-center gap-4 mb-4">
                     <Link
@@ -329,6 +329,12 @@ const PersonaList = ({ personas, onDeletePersona }) => {
                     <p className="pl-5">{persona.contextOfUse || ''}</p>
                   </div>
                   <div className="mt-4 flex items-center gap-2">
+                    <Link
+                      href={`/view-persona?id=${persona.id}`}
+                      className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
+                    >
+                      View
+                    </Link>
                     <button
                       onClick={() => handleEditClick(persona)}
                       className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
@@ -337,17 +343,11 @@ const PersonaList = ({ personas, onDeletePersona }) => {
                     </button>
                     <button
                       onClick={() => onDeletePersona(persona.id)}
-                      className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors ml-auto"
                       aria-label="Delete persona"
                     >
                       <TrashIcon className="w-5 h-5" />
                     </button>
-                    <Link
-                      href={`/view-persona?id=${persona.id}`}
-                      className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
-                    >
-                      View
-                    </Link>
                   </div>
                 </li>
               ))}

@@ -121,17 +121,18 @@ export default function JourneyMapsPage() {
                 <span className="font-medium text-slate-600">{map.stages?.length || 0}</span> stages
               </div>
 
-              {/* Stage preview */}
-              <div className="flex gap-1 mb-4 overflow-hidden">
-                {map.stages?.slice(0, 5).map((stage) => (
-                  <div
+              {/* Stage names preview */}
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {map.stages?.slice(0, 4).map((stage) => (
+                  <span
                     key={stage.id}
-                    className="flex-1 h-1.5 bg-slate-200 rounded-full"
-                    title={stage.name}
-                  />
+                    className="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded"
+                  >
+                    {stage.name}
+                  </span>
                 ))}
-                {(map.stages?.length || 0) > 5 && (
-                  <div className="text-xs text-slate-400">+{map.stages.length - 5}</div>
+                {(map.stages?.length || 0) > 4 && (
+                  <span className="text-xs text-slate-400 px-2 py-0.5">+{map.stages.length - 4} more</span>
                 )}
               </div>
 

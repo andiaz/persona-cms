@@ -299,7 +299,7 @@ export default function StageCard({
                   <button
                     onClick={handleAddTouchpoint}
                     disabled={!newTouchpoint.description.trim()}
-                    className="px-3 py-2 bg-slate-700 text-white text-xs font-medium rounded-lg hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-3 py-2 bg-slate-700 text-white text-xs font-medium rounded-lg hover:bg-slate-800 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-default transition-colors"
                   >
                     Add
                   </button>
@@ -357,7 +357,7 @@ export default function StageCard({
                   <button
                     onClick={() => handleAddPainPoint(newPainPoint)}
                     disabled={!newPainPoint.trim()}
-                    className="px-3 py-2 bg-slate-700 text-white text-xs font-medium rounded-lg hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-3 py-2 bg-slate-700 text-white text-xs font-medium rounded-lg hover:bg-slate-800 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-default transition-colors"
                   >
                     Add
                   </button>
@@ -429,7 +429,7 @@ export default function StageCard({
                 <button
                   onClick={handleAddOpportunity}
                   disabled={!newOpportunity.trim()}
-                  className="px-3 py-2 bg-slate-700 text-white text-xs font-medium rounded-lg hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-3 py-2 bg-slate-700 text-white text-xs font-medium rounded-lg hover:bg-slate-800 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-default transition-colors"
                 >
                   Add
                 </button>
