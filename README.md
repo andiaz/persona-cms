@@ -54,41 +54,14 @@ A free, privacy-first tool for creating user personas and journey maps. Your dat
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 18+ installed
-- npm, yarn, pnpm, or bun
-
-### Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/yourusername/persona-lab.git
-cd persona-lab
-```
-
-2. Install dependencies:
+Requires Node.js 18+
 
 ```bash
 npm install
-# or
-yarn install
-# or
-pnpm install
-```
-
-3. Start the development server:
-
-```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Production Build
 
@@ -127,7 +100,3 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 ## License
 
 MIT License - feel free to use this for personal or commercial projects.
-
-## Author
-
-Created by [Andreas Johansson](https://andreasjohanssonux.netlify.app/)
