@@ -4,13 +4,13 @@ A free, privacy-first tool for creating user personas and journey maps. Your dat
 
 ## Why Persona Lab?
 
-| Feature | Persona Lab | Paid Alternatives |
-|---------|-------------|-------------------|
-| Price | Free | $95+/month |
-| Data Location | Your device only | Cloud servers |
-| Account Required | No | Yes |
-| Offline Usage | Full | Limited |
-| Privacy | Data never leaves your browser | Data on their servers |
+| Feature          | Persona Lab                    | Paid Alternatives     |
+| ---------------- | ------------------------------ | --------------------- |
+| Price            | Free                           | $$$                   |
+| Data Location    | Your device only               | Cloud servers         |
+| Account Required | No                             | Yes                   |
+| Offline Usage    | Full                           | Limited               |
+| Privacy          | Data never leaves your browser | Data on their servers |
 
 ## Who Is This For?
 
@@ -23,6 +23,7 @@ A free, privacy-first tool for creating user personas and journey maps. Your dat
 ## Features
 
 ### Persona Management
+
 - Create detailed user personas with goals, pain points, tasks, and context
 - Auto-generated avatars with multiple style options (DiceBear integration)
 - Priority levels for persona importance
@@ -30,6 +31,7 @@ A free, privacy-first tool for creating user personas and journey maps. Your dat
 - Search across all persona attributes
 
 ### Journey Mapping
+
 - Visual stage-based journey maps
 - Link multiple personas to a single journey
 - Track touchpoints, emotions, pain points, and opportunities per stage
@@ -37,12 +39,14 @@ A free, privacy-first tool for creating user personas and journey maps. Your dat
 - Drag-and-drop stage reordering
 
 ### Export & Layouts
+
 - Multiple layout templates (Card, Full Profile, Minimal, Print)
 - Export personas as PNG images
 - PDF export via print dialog
 - JSON export/import for backups
 
 ### Privacy-First Design
+
 - All data stored in browser localStorage
 - Works completely offline
 - No tracking, no analytics, no data collection
@@ -51,18 +55,21 @@ A free, privacy-first tool for creating user personas and journey maps. Your dat
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18+ installed
 - npm, yarn, pnpm, or bun
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/persona-lab.git
 cd persona-lab
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -72,6 +79,7 @@ pnpm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 # or
@@ -101,12 +109,15 @@ npm start
 ## Data Management
 
 ### Backup Your Data
+
 Use the export feature to save your personas and journey maps as JSON files. This allows you to:
+
 - Back up your work
 - Transfer data between devices
 - Share templates with colleagues
 
 ### Import Data
+
 Import previously exported JSON files to restore your personas and journey maps.
 
 ## Contributing
