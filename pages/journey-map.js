@@ -127,7 +127,7 @@ export default function JourneyMapPage() {
 
   if (!journeyMap) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-16">
         <div className="text-slate-500">Loading journey map...</div>
       </div>
     );
@@ -136,20 +136,13 @@ export default function JourneyMapPage() {
   const linkedPersonas = getLinkedPersonas();
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div>
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-20">
+      <header className="bg-white border-b border-slate-200 sticky top-14 z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-14">
             {/* Left side */}
-            <div className="flex items-center gap-6">
-              <Link
-                href="/journey-maps"
-                className="text-slate-500 hover:text-slate-700 text-sm font-medium"
-              >
-                ← All Maps
-              </Link>
-
+            <div className="flex items-center gap-4">
               {/* Editable title */}
               {editingName ? (
                 <input

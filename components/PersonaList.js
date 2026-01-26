@@ -280,8 +280,7 @@ const PersonaList = ({ personas, onDeletePersona }) => {
                         persona.tags.map((tag, index) => (
                           <span
                             key={`tag-${index}`}
-                            onClick={() => handleEditClick(persona)}
-                            className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm"
+                            className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm"
                           >
                             {tag}
                           </span>
@@ -332,22 +331,22 @@ const PersonaList = ({ personas, onDeletePersona }) => {
                   <div className="mt-4 flex items-center gap-2">
                     <button
                       onClick={() => handleEditClick(persona)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => onDeletePersona(persona.id)}
-                      className="px-4 py-2 h-[40px] bg-gray-50 text-gray-500 rounded hover:bg-gray-300"
+                      className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                       aria-label="Delete persona"
                     >
                       <TrashIcon className="w-5 h-5" />
                     </button>
                     <Link
                       href={`/view-persona?id=${persona.id}`}
-                      className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                      className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
                     >
-                      View Layout
+                      View
                     </Link>
                   </div>
                 </li>

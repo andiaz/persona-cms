@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import html2canvas from 'html2canvas';
 import { getPersonaById } from '../lib/storage';
 import {
@@ -63,59 +62,58 @@ export default function ViewPersona() {
   const SelectedLayoutComponent = LayoutComponents[selectedLayout];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header - hidden when printing */}
-        <div className="flex flex-wrap justify-between items-center gap-4 mb-6 no-print">
-          <Link href="/" className="text-blue-600 hover:text-blue-800">
-            ← Back to Personas
-          </Link>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={exportAsPNG}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              Export PNG
-            </button>
-            <button
-              onClick={exportAsPDF}
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-              title="Opens print dialog - select 'Save as PDF' as destination"
-            >
-              Export PDF
-            </button>
-          </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Header - hidden when printing */}
+      <div className="flex flex-wrap justify-between items-center gap-4 mb-6 no-print">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900">{persona?.name || 'Persona'}</h1>
+          <p className="text-sm text-slate-500 mt-1">View and export persona</p>
         </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={exportAsPNG}
+            className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+          >
+            Export PNG
+          </button>
+          <button
+            onClick={exportAsPDF}
+            className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+            title="Opens print dialog - select 'Save as PDF' as destination"
+          >
+            Export PDF
+          </button>
+        </div>
+      </div>
 
-        {/* Layout Selector - hidden when printing */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6 no-print">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-medium text-gray-700 mr-2">Layout:</span>
-            {LAYOUT_OPTIONS.map((option) => (
-              <button
-                key={option.id}
-                onClick={() => setSelectedLayout(option.id)}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  selectedLayout === option.id
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-                title={option.description}
-              >
-                {option.name}
-              </button>
-            ))}
-          </div>
+      {/* Layout Selector - hidden when printing */}
+      <div className="bg-white rounded-xl border border-slate-200 p-4 mb-6 no-print">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm font-medium text-slate-600 mr-2">Layout:</span>
+          {LAYOUT_OPTIONS.map((option) => (
+            <button
+              key={option.id}
+              onClick={() => setSelectedLayout(option.id)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                selectedLayout === option.id
+                  ? 'bg-slate-800 text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+              title={option.description}
+            >
+              {option.name}
+            </button>
+          ))}
         </div>
+      </div>
 
-        {/* Persona Layout */}
-        <div id="persona-layout" className="bg-white rounded-lg shadow-sm">
-          {persona ? (
-            <SelectedLayoutComponent persona={persona} />
-          ) : (
-            <div className="p-8 text-center text-gray-500">Loading persona...</div>
-          )}
-        </div>
+      {/* Persona Layout */}
+      <div id="persona-layout" className="bg-white rounded-xl border border-slate-200">
+        {persona ? (
+          <SelectedLayoutComponent persona={persona} />
+        ) : (
+          <div className="p-8 text-center text-slate-500">Loading persona...</div>
+        )}
       </div>
     </div>
   );

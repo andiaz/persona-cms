@@ -61,44 +61,36 @@ export default function JourneyMapsPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-semibold">Journey Maps</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-2xl font-semibold text-slate-900">Journey Maps</h1>
+          <p className="text-sm text-slate-500 mt-1">
             Visualize user journeys across touchpoints
           </p>
         </div>
-        <div className="flex gap-4">
-          <Link
-            href="/"
-            className="px-4 py-2 text-gray-600 hover:text-gray-800"
-          >
-            ← Back to Personas
-          </Link>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-          >
-            New Journey Map
-          </button>
-        </div>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
+        >
+          + New Journey Map
+        </button>
       </div>
 
       {/* Journey Maps Grid */}
       {journeyMaps.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-lg shadow-sm">
-          <div className="text-6xl mb-4">🗺️</div>
-          <h2 className="text-xl font-semibold text-gray-700 mb-2">
+        <div className="text-center py-16 bg-white rounded-xl border border-slate-200">
+          <div className="text-5xl mb-4 opacity-50">🗺️</div>
+          <h2 className="text-lg font-semibold text-slate-700 mb-2">
             No Journey Maps Yet
           </h2>
-          <p className="text-gray-500 mb-6">
+          <p className="text-slate-500 mb-6 text-sm">
             Create your first journey map to visualize user experiences
           </p>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+            className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
           >
             Create Journey Map
           </button>
@@ -108,15 +100,15 @@ export default function JourneyMapsPage() {
           {journeyMaps.map((map) => (
             <div
               key={map.id}
-              className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
+              className="bg-white rounded-xl border border-slate-200 hover:border-slate-300 transition-colors p-5"
             >
-              <h3 className="text-lg font-semibold mb-2">{map.name}</h3>
+              <h3 className="text-base font-semibold text-slate-900 mb-2">{map.name}</h3>
 
               {/* Linked Personas */}
-              <div className="text-sm text-gray-500 mb-3">
+              <div className="text-sm text-slate-500 mb-3">
                 {map.personaIds?.length > 0 ? (
                   <span>
-                    <span className="font-medium">Personas:</span>{' '}
+                    <span className="font-medium text-slate-600">Personas:</span>{' '}
                     {getLinkedPersonaNames(map.personaIds) || 'None linked'}
                   </span>
                 ) : (
@@ -125,8 +117,8 @@ export default function JourneyMapsPage() {
               </div>
 
               {/* Stage count */}
-              <div className="text-sm text-gray-500 mb-4">
-                <span className="font-medium">{map.stages?.length || 0}</span> stages
+              <div className="text-sm text-slate-500 mb-4">
+                <span className="font-medium text-slate-600">{map.stages?.length || 0}</span> stages
               </div>
 
               {/* Stage preview */}
@@ -134,12 +126,12 @@ export default function JourneyMapsPage() {
                 {map.stages?.slice(0, 5).map((stage) => (
                   <div
                     key={stage.id}
-                    className="flex-1 h-2 bg-blue-200 rounded"
+                    className="flex-1 h-1.5 bg-slate-200 rounded-full"
                     title={stage.name}
                   />
                 ))}
                 {(map.stages?.length || 0) > 5 && (
-                  <div className="text-xs text-gray-400">+{map.stages.length - 5}</div>
+                  <div className="text-xs text-slate-400">+{map.stages.length - 5}</div>
                 )}
               </div>
 
@@ -147,13 +139,13 @@ export default function JourneyMapsPage() {
               <div className="flex gap-2">
                 <Link
                   href={`/journey-map?id=${map.id}`}
-                  className="flex-1 px-4 py-2 bg-blue-500 text-white rounded text-center hover:bg-blue-600 text-sm"
+                  className="flex-1 px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg text-center hover:bg-slate-900 transition-colors"
                 >
-                  Edit
+                  Open
                 </Link>
                 <button
                   onClick={() => handleDelete(map.id)}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+                  className="px-3 py-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm"
                   aria-label="Delete journey map"
                 >
                   Delete
@@ -161,7 +153,7 @@ export default function JourneyMapsPage() {
               </div>
 
               {/* Updated date */}
-              <div className="text-xs text-gray-400 mt-3">
+              <div className="text-xs text-slate-400 mt-3">
                 Updated: {new Date(map.updatedAt).toLocaleDateString()}
               </div>
             </div>
@@ -171,13 +163,13 @@ export default function JourneyMapsPage() {
 
       {/* Create Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
-            <h2 className="text-xl font-semibold mb-4">Create Journey Map</h2>
+        <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">Create Journey Map</h2>
 
             {/* Name input */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
                 Journey Map Name
               </label>
               <input
@@ -185,34 +177,34 @@ export default function JourneyMapsPage() {
                 value={newMapName}
                 onChange={(e) => setNewMapName(e.target.value)}
                 placeholder="e.g., Customer Onboarding Journey"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent"
                 autoFocus
               />
             </div>
 
             {/* Persona selection */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
                 Link Personas (optional)
               </label>
               {personas.length === 0 ? (
-                <p className="text-sm text-gray-500 italic">
+                <p className="text-sm text-slate-500 italic">
                   No personas available. Create some personas first.
                 </p>
               ) : (
-                <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-md">
+                <div className="max-h-40 overflow-y-auto border border-slate-200 rounded-lg">
                   {personas.map((persona) => (
                     <label
                       key={persona.id}
-                      className="flex items-center gap-3 p-2 hover:bg-gray-50 cursor-pointer"
+                      className="flex items-center gap-3 p-2.5 hover:bg-slate-50 cursor-pointer text-sm"
                     >
                       <input
                         type="checkbox"
                         checked={selectedPersonaIds.includes(persona.id)}
                         onChange={() => togglePersonaSelection(persona.id)}
-                        className="w-4 h-4 text-blue-600 rounded"
+                        className="w-4 h-4 text-slate-800 rounded border-slate-300"
                       />
-                      <span className="text-sm">{persona.name}</span>
+                      <span className="text-slate-700">{persona.name}</span>
                     </label>
                   ))}
                 </div>
@@ -227,14 +219,14 @@ export default function JourneyMapsPage() {
                   setNewMapName('');
                   setSelectedPersonaIds([]);
                 }}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCreate}
                 disabled={!newMapName.trim()}
-                className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 Create
               </button>

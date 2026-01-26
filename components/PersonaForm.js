@@ -233,9 +233,9 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-6 p-6 bg-white shadow-lg rounded-lg"
+      className="space-y-6 p-6 bg-white rounded-xl border border-slate-200"
     >
-      <h3 className="text-2xl font-semibold text-center">
+      <h3 className="text-lg font-semibold text-slate-900">
         {personaToEdit ? 'Edit Persona' : 'Add a New Persona'}
       </h3>
 
@@ -283,7 +283,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
             >
               Upload Image
             </button>
@@ -291,9 +291,9 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               <button
                 type="button"
                 onClick={() => setAvatarImage(null)}
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                className="px-4 py-2 text-sm font-medium text-slate-500 hover:text-red-500 transition-colors"
               >
-                Remove Image
+                Remove
               </button>
             )}
           </div>
@@ -306,7 +306,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
           {tags.map((tag, index) => (
             <span
               key={index}
-              className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1"
+              className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm flex items-center gap-1"
             >
               {tag}
               <button
@@ -380,7 +380,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               <button
                 type="button"
                 onClick={() => handleAddField('goals')}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                className="px-3 py-1.5 text-sm font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
               >
                 Add Goal
               </button>
@@ -389,7 +389,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               <button
                 type="button"
                 onClick={() => handleDeleteField(index, 'goals')}
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                className="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-red-500 transition-colors"
               >
                 Delete Goal
               </button>
@@ -414,7 +414,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               <button
                 type="button"
                 onClick={() => handleAddField('painPoints')}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                className="px-3 py-1.5 text-sm font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
               >
                 Add Pain Point
               </button>
@@ -423,7 +423,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               <button
                 type="button"
                 onClick={() => handleDeleteField(index, 'painPoints')}
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                className="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-red-500 transition-colors"
               >
                 Delete Pain Point
               </button>
@@ -448,7 +448,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               <button
                 type="button"
                 onClick={() => handleAddField('tasks')}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                className="px-3 py-1.5 text-sm font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
               >
                 Add Task
               </button>
@@ -457,7 +457,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               <button
                 type="button"
                 onClick={() => handleDeleteField(index, 'tasks')}
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                className="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-red-500 transition-colors"
               >
                 Delete Task
               </button>
@@ -493,7 +493,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               <button
                 type="button"
                 onClick={() => handleAddField('functionality')}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                className="px-3 py-1.5 text-sm font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
               >
                 Add Functionality
               </button>
@@ -502,7 +502,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               <button
                 type="button"
                 onClick={() => handleDeleteField(index, 'functionality')}
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                className="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-red-500 transition-colors"
               >
                 Delete Functionality
               </button>
@@ -519,19 +519,19 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
         />
       </div>
 
-      <div className="text-center">
-        <button
-          type="submit"
-          className="px-6 py-2 mt-4 bg-green-500 text-white rounded-md hover:bg-green-600"
-        >
-          {personaToEdit ? 'Save Changes' : 'Add Persona'}
-        </button>
+      <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
         <button
           type="button"
           onClick={handleCancel}
-          className="px-6 py-2 mt-4 ml-4 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+          className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 transition-colors"
         >
           Cancel
+        </button>
+        <button
+          type="submit"
+          className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
+        >
+          {personaToEdit ? 'Save Changes' : 'Add Persona'}
         </button>
       </div>
     </form>

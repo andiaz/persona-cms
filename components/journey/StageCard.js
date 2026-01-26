@@ -294,12 +294,12 @@ export default function StageCard({
                     onChange={(e) => setNewTouchpoint({ ...newTouchpoint, description: e.target.value })}
                     onKeyDown={(e) => e.key === 'Enter' && handleAddTouchpoint()}
                     placeholder="Describe the touchpoint..."
-                    className="flex-1 text-xs border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="flex-1 text-xs border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-400 focus:border-transparent"
                   />
                   <button
                     onClick={handleAddTouchpoint}
                     disabled={!newTouchpoint.description.trim()}
-                    className="px-3 py-2 bg-blue-500 text-white text-xs font-medium rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-3 py-2 bg-slate-700 text-white text-xs font-medium rounded-lg hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     Add
                   </button>
@@ -352,12 +352,12 @@ export default function StageCard({
                     onFocus={() => setShowPainPointSuggestions(true)}
                     onKeyDown={(e) => e.key === 'Enter' && handleAddPainPoint(newPainPoint)}
                     placeholder="Add a pain point..."
-                    className="flex-1 text-xs border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="flex-1 text-xs border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-400 focus:border-transparent"
                   />
                   <button
                     onClick={() => handleAddPainPoint(newPainPoint)}
                     disabled={!newPainPoint.trim()}
-                    className="px-3 py-2 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-3 py-2 bg-slate-700 text-white text-xs font-medium rounded-lg hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     Add
                   </button>
@@ -424,12 +424,12 @@ export default function StageCard({
                   onChange={(e) => setNewOpportunity(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleAddOpportunity()}
                   placeholder="Add an opportunity..."
-                  className="flex-1 text-xs border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  className="flex-1 text-xs border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-slate-400 focus:border-transparent"
                 />
                 <button
                   onClick={handleAddOpportunity}
                   disabled={!newOpportunity.trim()}
-                  className="px-3 py-2 bg-emerald-500 text-white text-xs font-medium rounded-lg hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-3 py-2 bg-slate-700 text-white text-xs font-medium rounded-lg hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   Add
                 </button>
