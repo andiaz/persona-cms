@@ -22,7 +22,7 @@ export default function Layout({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 flex flex-col">
       {/* Navigation Header */}
       <header className="bg-gradient-to-r from-slate-800 to-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,7 +54,25 @@ export default function Layout({ children }) {
       </header>
 
       {/* Main Content */}
-      <main>{children}</main>
+      <main className="flex-1">{children}</main>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-200 bg-white py-4 mt-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs text-slate-400 text-center">
+            Avatars powered by{' '}
+            <a
+              href="https://dicebear.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-slate-700 underline"
+            >
+              DiceBear
+            </a>
+            {' '}(CC BY 4.0 / MIT)
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

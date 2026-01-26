@@ -108,6 +108,27 @@ const PersonaList = ({ personas, onDeletePersona }) => {
     }
   }, [dropdownOpen]); // Trigger focus when dropdown opens
 
+  // Empty state - show before filters when no personas exist
+  if (personas.length === 0) {
+    return (
+      <div className="text-center py-16 bg-white rounded-xl border border-slate-200">
+        <div className="text-5xl mb-4 opacity-50">👤</div>
+        <h2 className="text-lg font-semibold text-slate-700 mb-2">
+          No Personas Yet
+        </h2>
+        <p className="text-slate-500 mb-6 text-sm">
+          Create your first persona to get started
+        </p>
+        <Link
+          href="/add-persona"
+          className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
+        >
+          Create Persona
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div>
@@ -232,8 +253,10 @@ const PersonaList = ({ personas, onDeletePersona }) => {
         </div>
 
         <div>
-          {personas.length === 0 ? (
-            <p>No personas found.</p>
+          {filteredPersonas.length === 0 ? (
+            <div className="text-center py-12 bg-white rounded-xl border border-slate-200">
+              <p className="text-slate-500">No personas match your filters.</p>
+            </div>
           ) : (
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredPersonas.map((persona) => (

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import PersonaList from '../components/PersonaList';
 import React from 'react';
+import { createAvatar } from '@dicebear/core';
+import { lorelei, notionists, adventurer, avataaars, bottts, funEmoji } from '@dicebear/collection';
 import {
   getPersonas,
   addPersona as storageAddPersona,
@@ -11,6 +13,16 @@ import {
   importData,
   migrateFromSessionStorage,
 } from '../lib/storage';
+
+const AVATAR_STYLES = [lorelei, notionists, adventurer, avataaars, bottts, funEmoji];
+
+const PERSONA_NAMES = [
+  'Alex Chen', 'Jordan Taylor', 'Morgan Smith', 'Casey Rivera',
+  'Riley Johnson', 'Quinn Williams', 'Avery Davis', 'Jamie Martinez',
+  'Drew Thompson', 'Cameron Lee', 'Skyler Anderson', 'Peyton Garcia',
+  'Reese Brown', 'Finley Wilson', 'Dakota Moore', 'Hayden Clark',
+  'Parker Lewis', 'Sage Robinson', 'Blake Turner', 'Rowan Hall',
+];
 
 const generateTestPersona = () => {
   const id = Date.now();
@@ -112,9 +124,20 @@ const generateTestPersona = () => {
     return shuffled.slice(0, count);
   };
 
+  const personaName = PERSONA_NAMES[Math.floor(Math.random() * PERSONA_NAMES.length)];
+
+  // Generate random avatar using DiceBear
+  const randomStyle = AVATAR_STYLES[Math.floor(Math.random() * AVATAR_STYLES.length)];
+  const avatar = createAvatar(randomStyle, {
+    seed: personaName,
+    size: 256,
+  });
+  const avatarImage = avatar.toDataUri();
+
   return {
     id,
-    name: `Test Persona ${id.toString().slice(-4)}`,
+    name: personaName,
+    avatarImage,
     goals: getRandomItems(possibleGoals, 2 + Math.floor(Math.random() * 2)), // 2-3 goals
     painPoints: getRandomItems(
       possiblePainPoints,

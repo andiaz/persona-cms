@@ -2,7 +2,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { createAvatar } from '@dicebear/core';
+import {
+  lorelei,
+  notionists,
+  adventurer,
+  avataaars,
+  bottts,
+  funEmoji,
+} from '@dicebear/collection';
 import { getAllTags } from '../lib/storage';
+
+const AVATAR_STYLES = [
+  { id: 'lorelei', name: 'Illustrated', style: lorelei },
+  { id: 'notionists', name: 'Notion', style: notionists },
+  { id: 'adventurer', name: 'Adventure', style: adventurer },
+  { id: 'avataaars', name: 'Cartoon', style: avataaars },
+  { id: 'bottts', name: 'Robot', style: bottts },
+  { id: 'funEmoji', name: 'Emoji', style: funEmoji },
+];
 
 const PrioritySelect = ({ value, onChange, label }) => (
   <div className="flex items-center gap-2">
@@ -39,6 +57,80 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const isHandlingSuggestion = useRef(false);
   const [personaPriority, setPersonaPriority] = useState(0);
+  const [avatarStyle, setAvatarStyle] = useState('lorelei');
+
+  const generateAvatar = (seedName, style) => {
+    const selectedStyle = style
+      ? AVATAR_STYLES.find((s) => s.id === style)
+      : AVATAR_STYLES.find((s) => s.id === avatarStyle);
+    if (!selectedStyle) return null;
+
+    const seed = seedName || name.trim() || `persona-${Date.now()}`;
+    const avatar = createAvatar(selectedStyle.style, {
+      seed,
+      size: 256,
+    });
+
+    // Use toDataUri() which handles encoding properly
+    const dataUri = avatar.toDataUri();
+    if (!seedName) {
+      setAvatarImage(dataUri);
+    }
+    return dataUri;
+  };
+
+  const prefillSampleData = () => {
+    const sampleNames = [
+      'Alex Chen', 'Sarah Johnson', 'Marcus Williams', 'Emma Rodriguez',
+      'David Kim', 'Olivia Thompson', 'James Martinez', 'Sophia Lee',
+    ];
+    const sampleGoals = [
+      'Improve workflow efficiency', 'Reduce manual tasks', 'Better team collaboration',
+      'Increase customer satisfaction', 'Streamline decision making', 'Enhance user experience',
+    ];
+    const samplePainPoints = [
+      'Too many manual steps', 'Lack of automation', 'Communication gaps',
+      'Unclear requirements', 'Inconsistent processes', 'Tool fragmentation',
+    ];
+    const sampleTasks = [
+      'Daily team updates', 'Project planning', 'Code reviews',
+      'Documentation writing', 'Stakeholder meetings', 'User research',
+    ];
+    const sampleFunctionality = [
+      'Task automation', 'Team chat', 'Analytics dashboard',
+      'Collaboration tools', 'Project tracking', 'Knowledge base',
+    ];
+    const sampleContexts = [
+      'Office environment with remote team members',
+      'Fully remote setup with distributed teams',
+      'Hybrid workplace with flexible hours',
+    ];
+    const sampleTags = ['developer', 'designer', 'manager', 'frontend', 'backend', 'agile', 'qa'];
+
+    const getRandomItems = (arr, count) => {
+      const shuffled = [...arr].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, count);
+    };
+
+    const randomName = sampleNames[Math.floor(Math.random() * sampleNames.length)];
+    const randomStyleId = AVATAR_STYLES[Math.floor(Math.random() * AVATAR_STYLES.length)].id;
+
+    setName(randomName);
+    setGoals(getRandomItems(sampleGoals, 2 + Math.floor(Math.random() * 2)));
+    setPainPoints(getRandomItems(samplePainPoints, 2 + Math.floor(Math.random() * 2)));
+    setTasks(getRandomItems(sampleTasks, 2 + Math.floor(Math.random() * 2)));
+    setFunctionality(getRandomItems(sampleFunctionality, 2 + Math.floor(Math.random() * 2)));
+    setContextOfUse(sampleContexts[Math.floor(Math.random() * sampleContexts.length)]);
+    setTags(getRandomItems(sampleTags, 2 + Math.floor(Math.random() * 2)));
+    setPersonaPriority(Math.floor(Math.random() * 5));
+    setAvatarStyle(randomStyleId);
+
+    // Generate avatar with the new name
+    const avatarUri = generateAvatar(randomName, randomStyleId);
+    if (avatarUri) {
+      setAvatarImage(avatarUri);
+    }
+  };
 
   const router = useRouter();
 
@@ -235,9 +327,20 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
       onSubmit={handleSubmit}
       className="space-y-6 p-6 bg-white rounded-xl border border-slate-200"
     >
-      <h3 className="text-lg font-semibold text-slate-900">
-        {personaToEdit ? 'Edit Persona' : 'Add a New Persona'}
-      </h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-slate-900">
+          {personaToEdit ? 'Edit Persona' : 'Add a New Persona'}
+        </h3>
+        {!personaToEdit && (
+          <button
+            type="button"
+            onClick={prefillSampleData}
+            className="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+          >
+            Pre-fill Sample Data
+          </button>
+        )}
+      </div>
 
       <div className="space-y-2">
         <label htmlFor="name" className="block text-sm font-medium">
@@ -257,8 +360,8 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
 
       <div className="space-y-2">
         <label className="block text-sm font-medium">Avatar Image:</label>
-        <div className="flex items-center gap-4">
-          <div className="relative w-32 h-32 bg-gray-200 rounded-full overflow-hidden">
+        <div className="flex items-start gap-4">
+          <div className="relative w-32 h-32 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
             {avatarImage ? (
               <Image
                 src={avatarImage}
@@ -272,31 +375,64 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               </div>
             )}
           </div>
-          <div className="flex flex-col gap-2">
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImageUpload}
-              accept="image/*"
-              className="hidden"
-              data-testid="image-input"
-            />
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
-            >
-              Upload Image
-            </button>
-            {avatarImage && (
+          <div className="flex flex-col gap-3">
+            {/* Generate Avatar Section */}
+            <div className="space-y-2">
+              <div className="flex flex-wrap gap-1.5">
+                {AVATAR_STYLES.map((style) => (
+                  <button
+                    key={style.id}
+                    type="button"
+                    onClick={() => setAvatarStyle(style.id)}
+                    className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
+                      avatarStyle === style.id
+                        ? 'bg-slate-800 text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    {style.name}
+                  </button>
+                ))}
+              </div>
               <button
                 type="button"
-                onClick={() => setAvatarImage(null)}
-                className="px-4 py-2 text-sm font-medium text-slate-500 hover:text-red-500 transition-colors"
+                onClick={generateAvatar}
+                className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-colors"
               >
-                Remove
+                Generate Avatar
               </button>
-            )}
+              <p className="text-xs text-slate-400">
+                {name ? `Based on "${name}"` : 'Enter a name first for consistent results'}
+              </p>
+            </div>
+
+            {/* Upload/Remove Section */}
+            <div className="flex gap-2 pt-2 border-t border-slate-100">
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageUpload}
+                accept="image/*"
+                className="hidden"
+                data-testid="image-input"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+              >
+                Upload Custom
+              </button>
+              {avatarImage && (
+                <button
+                  type="button"
+                  onClick={() => setAvatarImage(null)}
+                  className="px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-red-500 transition-colors"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

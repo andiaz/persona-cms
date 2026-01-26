@@ -71,7 +71,10 @@ export default function JourneyMapsPage() {
           </p>
         </div>
         <button
-          onClick={() => setShowCreateModal(true)}
+          onClick={() => {
+            setNewMapName(`Journey Map ${journeyMaps.length + 1}`);
+            setShowCreateModal(true);
+          }}
           className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
         >
           + New Journey Map
@@ -89,7 +92,10 @@ export default function JourneyMapsPage() {
             Create your first journey map to visualize user experiences
           </p>
           <button
-            onClick={() => setShowCreateModal(true)}
+            onClick={() => {
+              setNewMapName(`Journey Map ${journeyMaps.length + 1}`);
+              setShowCreateModal(true);
+            }}
             className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
           >
             Create Journey Map
@@ -189,9 +195,17 @@ export default function JourneyMapsPage() {
                 Link Personas (optional)
               </label>
               {personas.length === 0 ? (
-                <p className="text-sm text-slate-500 italic">
-                  No personas available. Create some personas first.
-                </p>
+                <div className="text-center py-4 border border-slate-200 rounded-lg bg-slate-50">
+                  <p className="text-sm text-slate-500 mb-2">
+                    No personas available yet.
+                  </p>
+                  <Link
+                    href="/add-persona"
+                    className="text-sm font-medium text-slate-800 hover:text-slate-900 underline"
+                  >
+                    Create a persona first
+                  </Link>
+                </div>
               ) : (
                 <div className="max-h-40 overflow-y-auto border border-slate-200 rounded-lg">
                   {personas.map((persona) => (
