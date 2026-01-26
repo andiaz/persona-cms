@@ -13,12 +13,13 @@ import {
 import StageCard from '../components/journey/StageCard';
 import EmotionGraph from '../components/journey/EmotionGraph';
 
-const EMOTION_COLORS = [
+const PERSONA_COLORS = [
   '#3B82F6', // blue
-  '#10B981', // green
+  '#10B981', // emerald
   '#F59E0B', // amber
   '#EF4444', // red
   '#8B5CF6', // purple
+  '#EC4899', // pink
 ];
 
 export default function JourneyMapPage() {
@@ -27,6 +28,7 @@ export default function JourneyMapPage() {
   const [editingName, setEditingName] = useState(false);
   const [mapName, setMapName] = useState('');
   const [showPersonaSelector, setShowPersonaSelector] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const mapRef = useRef(null);
   const router = useRouter();
   const { id } = router.query;
@@ -84,21 +86,6 @@ export default function JourneyMapPage() {
     saveMap({ ...journeyMap, stages: updatedStages });
   };
 
-  const handleMoveStage = (stageId, direction) => {
-    if (!journeyMap) return;
-    const stages = [...journeyMap.stages];
-    const index = stages.findIndex((s) => s.id === stageId);
-    if (
-      (direction === 'left' && index === 0) ||
-      (direction === 'right' && index === stages.length - 1)
-    ) {
-      return;
-    }
-    const newIndex = direction === 'left' ? index - 1 : index + 1;
-    [stages[index], stages[newIndex]] = [stages[newIndex], stages[index]];
-    saveMap({ ...journeyMap, stages });
-  };
-
   const togglePersona = (personaId) => {
     if (!journeyMap) return;
     const currentIds = journeyMap.personaIds || [];
@@ -117,10 +104,20 @@ export default function JourneyMapPage() {
 
   const exportAsPNG = async () => {
     if (!mapRef.current) return;
+
+    // Set exporting state to hide interactive elements
+    setIsExporting(true);
+
+    // Wait for state to update and re-render
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     const canvas = await html2canvas(mapRef.current, {
-      backgroundColor: '#ffffff',
+      backgroundColor: '#f8fafc',
       scale: 2,
     });
+
+    setIsExporting(false);
+
     const image = canvas.toDataURL('image/png');
     const link = document.createElement('a');
     link.href = image;
@@ -130,8 +127,8 @@ export default function JourneyMapPage() {
 
   if (!journeyMap) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading journey map...</div>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-slate-500">Loading journey map...</div>
       </div>
     );
   }
@@ -139,17 +136,18 @@ export default function JourneyMapPage() {
   const linkedPersonas = getLinkedPersonas();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-full mx-auto px-4 py-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Left side */}
+            <div className="flex items-center gap-6">
               <Link
                 href="/journey-maps"
-                className="text-blue-600 hover:text-blue-800"
+                className="text-slate-500 hover:text-slate-700 text-sm font-medium"
               >
-                ← Back
+                ← All Maps
               </Link>
 
               {/* Editable title */}
@@ -160,12 +158,12 @@ export default function JourneyMapPage() {
                   onChange={(e) => setMapName(e.target.value)}
                   onBlur={handleNameSave}
                   onKeyDown={(e) => e.key === 'Enter' && handleNameSave()}
-                  className="text-xl font-semibold border-b-2 border-blue-500 focus:outline-none"
+                  className="text-lg font-semibold border-b-2 border-blue-500 focus:outline-none bg-transparent"
                   autoFocus
                 />
               ) : (
                 <h1
-                  className="text-xl font-semibold cursor-pointer hover:text-blue-600"
+                  className="text-lg font-semibold text-slate-900 cursor-pointer hover:text-blue-600 transition-colors"
                   onClick={() => setEditingName(true)}
                   title="Click to edit"
                 >
@@ -174,38 +172,59 @@ export default function JourneyMapPage() {
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            {/* Right side */}
+            <div className="flex items-center gap-3">
               {/* Persona selector */}
               <div className="relative">
                 <button
                   onClick={() => setShowPersonaSelector(!showPersonaSelector)}
-                  className="px-3 py-2 bg-gray-100 rounded hover:bg-gray-200 text-sm"
+                  className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
                 >
-                  Personas ({linkedPersonas.length})
+                  <span className="flex -space-x-1">
+                    {linkedPersonas.slice(0, 3).map((p, i) => (
+                      <span
+                        key={p.id}
+                        className="w-5 h-5 rounded-full border-2 border-white"
+                        style={{ backgroundColor: PERSONA_COLORS[i % PERSONA_COLORS.length] }}
+                      />
+                    ))}
+                  </span>
+                  {linkedPersonas.length} Persona{linkedPersonas.length !== 1 ? 's' : ''}
                 </button>
+
                 {showPersonaSelector && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border z-20">
-                    <div className="p-2 border-b text-sm font-medium text-gray-700">
-                      Link Personas
+                  <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-slate-200 z-30">
+                    <div className="p-3 border-b border-slate-100">
+                      <h3 className="font-semibold text-slate-900 text-sm">Link Personas</h3>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        Track their experience across the journey
+                      </p>
                     </div>
-                    <div className="max-h-60 overflow-y-auto">
+                    <div className="max-h-64 overflow-y-auto p-2">
                       {personas.length === 0 ? (
-                        <div className="p-3 text-sm text-gray-500">
-                          No personas available
-                        </div>
+                        <p className="p-3 text-sm text-slate-500 text-center">
+                          No personas yet.{' '}
+                          <Link href="/add-persona" className="text-blue-500 hover:underline">
+                            Create one
+                          </Link>
+                        </p>
                       ) : (
-                        personas.map((persona) => (
+                        personas.map((persona, idx) => (
                           <label
                             key={persona.id}
-                            className="flex items-center gap-2 p-2 hover:bg-gray-50 cursor-pointer"
+                            className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer"
                           >
                             <input
                               type="checkbox"
                               checked={journeyMap.personaIds?.includes(persona.id)}
                               onChange={() => togglePersona(persona.id)}
-                              className="w-4 h-4 text-blue-600 rounded"
+                              className="w-4 h-4 text-blue-600 rounded border-slate-300"
                             />
-                            <span className="text-sm">{persona.name}</span>
+                            <span
+                              className="w-3 h-3 rounded-full"
+                              style={{ backgroundColor: PERSONA_COLORS[idx % PERSONA_COLORS.length] }}
+                            />
+                            <span className="text-sm text-slate-700">{persona.name}</span>
                           </label>
                         ))
                       )}
@@ -216,68 +235,66 @@ export default function JourneyMapPage() {
 
               <button
                 onClick={handleAddStage}
-                className="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm"
+                className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
               >
                 + Add Stage
               </button>
+
               <button
                 onClick={exportAsPNG}
-                className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
               >
                 Export PNG
               </button>
             </div>
           </div>
+        </div>
+      </header>
 
-          {/* Linked personas legend */}
+      {/* Main content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div ref={mapRef} className="space-y-8">
+          {/* Persona Legend */}
           {linkedPersonas.length > 0 && (
-            <div className="flex items-center gap-4 mt-3 text-sm">
-              <span className="text-gray-500">Emotion tracking:</span>
+            <div className="flex items-center gap-6 text-sm">
+              <span className="text-slate-500 font-medium">Tracking:</span>
               {linkedPersonas.map((persona, idx) => (
-                <div key={persona.id} className="flex items-center gap-1">
-                  <div
+                <div key={persona.id} className="flex items-center gap-2">
+                  <span
                     className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: EMOTION_COLORS[idx % EMOTION_COLORS.length] }}
+                    style={{ backgroundColor: PERSONA_COLORS[idx % PERSONA_COLORS.length] }}
                   />
-                  <span>{persona.name}</span>
+                  <span className="text-slate-700">{persona.name}</span>
                 </div>
               ))}
             </div>
           )}
-        </div>
-      </div>
 
-      {/* Journey Map Content */}
-      <div className="p-4 overflow-x-auto">
-        <div ref={mapRef} className="bg-white rounded-lg shadow-sm p-6 min-w-max">
           {/* Emotion Graph */}
           {linkedPersonas.length > 0 && (
             <EmotionGraph
               stages={journeyMap.stages}
               personas={linkedPersonas}
-              colors={EMOTION_COLORS}
+              colors={PERSONA_COLORS}
             />
           )}
 
-          {/* Stages */}
-          <div className="flex gap-4">
-            {journeyMap.stages?.map((stage, index) => (
+          {/* Stages Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {journeyMap.stages?.map((stage) => (
               <StageCard
                 key={stage.id}
                 stage={stage}
-                stageIndex={index}
-                totalStages={journeyMap.stages.length}
                 linkedPersonas={linkedPersonas}
-                personaColors={EMOTION_COLORS}
+                personaColors={PERSONA_COLORS}
                 onUpdate={(updates) => handleUpdateStage(stage.id, updates)}
                 onDelete={() => handleDeleteStage(stage.id)}
-                onMoveLeft={() => handleMoveStage(stage.id, 'left')}
-                onMoveRight={() => handleMoveStage(stage.id, 'right')}
+                isExporting={isExporting}
               />
             ))}
           </div>
         </div>
-      </div>
+      </main>
 
       {/* Click outside to close persona selector */}
       {showPersonaSelector && (

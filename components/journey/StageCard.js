@@ -1,6 +1,6 @@
 // components/journey/StageCard.js
 import { useState } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 
 const CHANNELS = [
   { id: 'web', label: 'Web', icon: '🌐' },
@@ -12,23 +12,20 @@ const CHANNELS = [
 ];
 
 const EMOTIONS = [
-  { value: 2, label: 'Very Happy', icon: '😄' },
-  { value: 1, label: 'Happy', icon: '🙂' },
-  { value: 0, label: 'Neutral', icon: '😐' },
-  { value: -1, label: 'Unhappy', icon: '😕' },
-  { value: -2, label: 'Very Unhappy', icon: '😞' },
+  { value: 2, label: 'Delighted', color: '#22c55e' },
+  { value: 1, label: 'Happy', color: '#84cc16' },
+  { value: 0, label: 'Neutral', color: '#eab308' },
+  { value: -1, label: 'Frustrated', color: '#f97316' },
+  { value: -2, label: 'Upset', color: '#ef4444' },
 ];
 
 export default function StageCard({
   stage,
-  stageIndex,
-  totalStages,
   linkedPersonas,
   personaColors,
   onUpdate,
   onDelete,
-  onMoveLeft,
-  onMoveRight,
+  isExporting = false,
 }) {
   const [editingName, setEditingName] = useState(false);
   const [stageName, setStageName] = useState(stage.name);
@@ -37,7 +34,6 @@ export default function StageCard({
   const [newOpportunity, setNewOpportunity] = useState('');
   const [showPainPointSuggestions, setShowPainPointSuggestions] = useState(false);
 
-  // Get pain point suggestions from linked personas
   const getPainPointSuggestions = () => {
     const suggestions = [];
     linkedPersonas.forEach((persona) => {
@@ -113,258 +109,361 @@ export default function StageCard({
     return emotion?.value ?? 0;
   };
 
+  const getEmotionInfo = (value) => {
+    return EMOTIONS.find((e) => e.value === value) || EMOTIONS[2];
+  };
+
   const painPointSuggestions = getPainPointSuggestions();
 
   return (
-    <div className="w-72 flex-shrink-0 bg-gray-50 rounded-lg border border-gray-200">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       {/* Stage Header */}
-      <div className="bg-blue-600 text-white p-3 rounded-t-lg">
+      <div className="bg-gradient-to-r from-slate-700 to-slate-800 text-white px-4 py-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <button
-              onClick={onMoveLeft}
-              disabled={stageIndex === 0}
-              className="p-1 hover:bg-blue-700 rounded disabled:opacity-30"
-              title="Move left"
-            >
-              <ChevronLeftIcon className="w-4 h-4" />
-            </button>
-            <button
-              onClick={onMoveRight}
-              disabled={stageIndex === totalStages - 1}
-              className="p-1 hover:bg-blue-700 rounded disabled:opacity-30"
-              title="Move right"
-            >
-              <ChevronRightIcon className="w-4 h-4" />
-            </button>
-          </div>
-
-          {editingName ? (
+          {editingName && !isExporting ? (
             <input
               type="text"
               value={stageName}
               onChange={(e) => setStageName(e.target.value)}
               onBlur={handleNameSave}
               onKeyDown={(e) => e.key === 'Enter' && handleNameSave()}
-              className="flex-1 mx-2 px-2 py-1 text-sm bg-blue-700 rounded border-none focus:outline-none focus:ring-1 focus:ring-white"
+              className="flex-1 px-2 py-1 text-sm bg-slate-600 rounded border-none focus:outline-none focus:ring-2 focus:ring-white/50"
               autoFocus
             />
           ) : (
-            <span
-              className="flex-1 mx-2 font-medium cursor-pointer hover:underline text-center"
-              onClick={() => setEditingName(true)}
-              title="Click to edit"
-            >
+            <h3 className="font-semibold text-sm flex items-center gap-2">
               {stage.name}
-            </span>
+              {!isExporting && (
+                <button
+                  onClick={() => setEditingName(true)}
+                  className="opacity-60 hover:opacity-100"
+                >
+                  <PencilIcon className="w-3 h-3" />
+                </button>
+              )}
+            </h3>
           )}
-
-          <button
-            onClick={onDelete}
-            className="p-1 hover:bg-red-600 rounded"
-            title="Delete stage"
-          >
-            <TrashIcon className="w-4 h-4" />
-          </button>
+          {!isExporting && (
+            <button
+              onClick={onDelete}
+              className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+              title="Delete stage"
+            >
+              <TrashIcon className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
 
-      <div className="p-3 space-y-4 max-h-[500px] overflow-y-auto">
+      <div className="p-4 space-y-5">
         {/* Emotions per persona */}
         {linkedPersonas.length > 0 && (
           <div>
-            <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">
-              Emotions
+            <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+              Experience
             </h4>
-            <div className="space-y-2">
-              {linkedPersonas.map((persona, idx) => (
-                <div key={persona.id} className="flex items-center gap-2">
-                  <div
-                    className="w-2 h-2 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: personaColors[idx % personaColors.length] }}
-                  />
-                  <span className="text-xs text-gray-600 w-16 truncate" title={persona.name}>
-                    {persona.name}
-                  </span>
-                  <div className="flex gap-1">
-                    {EMOTIONS.map((emotion) => (
-                      <button
-                        key={emotion.value}
-                        onClick={() => handleEmotionChange(persona.id, emotion.value)}
-                        className={`text-sm p-1 rounded ${
-                          getEmotionValue(persona.id) === emotion.value
-                            ? 'bg-blue-100 ring-1 ring-blue-400'
-                            : 'hover:bg-gray-100'
-                        }`}
-                        title={emotion.label}
+            <div className="space-y-3">
+              {linkedPersonas.map((persona, idx) => {
+                const emotionValue = getEmotionValue(persona.id);
+                const emotionInfo = getEmotionInfo(emotionValue);
+                return (
+                  <div key={persona.id} className="space-y-1.5">
+                    <div style={{ display: 'table', width: '100%' }}>
+                      <span
+                        style={{
+                          display: 'table-cell',
+                          verticalAlign: 'middle',
+                          width: '18px'
+                        }}
                       >
-                        {emotion.icon}
-                      </button>
-                    ))}
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            width: '10px',
+                            height: '10px',
+                            borderRadius: '50%',
+                            backgroundColor: personaColors[idx % personaColors.length]
+                          }}
+                        />
+                      </span>
+                      <span
+                        className="font-medium text-slate-600"
+                        style={{
+                          display: 'table-cell',
+                          verticalAlign: 'middle',
+                          fontSize: '12px',
+                          lineHeight: '24px',
+                          maxWidth: '120px',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        {persona.name}
+                      </span>
+                      <span
+                        style={{
+                          display: 'table-cell',
+                          verticalAlign: 'middle',
+                          textAlign: 'right',
+                          width: '90px'
+                        }}
+                      >
+                        <span
+                          className="font-medium"
+                          style={{
+                            display: 'inline-block',
+                            fontSize: '12px',
+                            lineHeight: '20px',
+                            padding: '2px 8px',
+                            borderRadius: '9999px',
+                            backgroundColor: `${emotionInfo.color}20`,
+                            color: emotionInfo.color,
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          {emotionInfo.label}
+                        </span>
+                      </span>
+                    </div>
+                    {/* Emotion slider - hidden during export */}
+                    {!isExporting && (
+                      <div className="flex items-center gap-1 pl-4">
+                        <input
+                          type="range"
+                          min="-2"
+                          max="2"
+                          step="1"
+                          value={emotionValue}
+                          onChange={(e) => handleEmotionChange(persona.id, parseInt(e.target.value))}
+                          className="flex-1 h-1.5 appearance-none rounded-full cursor-pointer"
+                          style={{
+                            background: `linear-gradient(to right, #ef4444, #f97316, #eab308, #84cc16, #22c55e)`,
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
 
         {/* Touchpoints */}
         <div>
-          <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+          <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
             Touchpoints
           </h4>
           <div className="space-y-2">
-            {stage.touchpoints?.map((tp) => (
-              <div
-                key={tp.id}
-                className="flex items-start gap-2 bg-white p-2 rounded text-sm group"
-              >
-                <span title={CHANNELS.find((c) => c.id === tp.channel)?.label}>
-                  {CHANNELS.find((c) => c.id === tp.channel)?.icon || '📌'}
-                </span>
-                <span className="flex-1">{tp.description}</span>
-                <button
-                  onClick={() => handleRemoveTouchpoint(tp.id)}
-                  className="text-red-500 opacity-0 group-hover:opacity-100"
-                >
-                  ×
-                </button>
+            {stage.touchpoints?.length > 0 ? (
+              stage.touchpoints.map((tp) => {
+                const channel = CHANNELS.find((c) => c.id === tp.channel);
+                return (
+                  <div
+                    key={tp.id}
+                    className="bg-slate-50 px-3 py-2 rounded-lg text-sm group"
+                    style={{ display: 'table', width: '100%' }}
+                  >
+                    <span
+                      className="bg-blue-100 rounded"
+                      style={{
+                        display: 'table-cell',
+                        verticalAlign: 'top',
+                        width: '24px',
+                        height: '24px',
+                        textAlign: 'center',
+                        fontSize: '14px',
+                        lineHeight: '24px'
+                      }}
+                    >
+                      {channel?.icon || '📌'}
+                    </span>
+                    <span style={{ display: 'table-cell', width: '8px' }} />
+                    <span style={{ display: 'table-cell', verticalAlign: 'top' }}>
+                      <span className="text-slate-700" style={{ display: 'block', lineHeight: '20px' }}>{tp.description}</span>
+                      <span className="text-slate-400" style={{ display: 'block', fontSize: '12px', lineHeight: '16px' }}>{channel?.label}</span>
+                    </span>
+                    {!isExporting && (
+                      <span style={{ display: 'table-cell', verticalAlign: 'top', width: '20px', textAlign: 'right' }}>
+                        <button
+                          onClick={() => handleRemoveTouchpoint(tp.id)}
+                          className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    )}
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-xs text-slate-400 italic py-2">
+                {isExporting ? 'No touchpoints defined' : 'No touchpoints yet'}
               </div>
-            ))}
-            {/* Add touchpoint form */}
-            <div className="flex gap-1">
-              <select
-                value={newTouchpoint.channel}
-                onChange={(e) =>
-                  setNewTouchpoint({ ...newTouchpoint, channel: e.target.value })
-                }
-                className="text-xs border rounded px-1 py-1"
-              >
-                {CHANNELS.map((ch) => (
-                  <option key={ch.id} value={ch.id}>
-                    {ch.icon} {ch.label}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="text"
-                value={newTouchpoint.description}
-                onChange={(e) =>
-                  setNewTouchpoint({ ...newTouchpoint, description: e.target.value })
-                }
-                onKeyDown={(e) => e.key === 'Enter' && handleAddTouchpoint()}
-                placeholder="Add touchpoint..."
-                className="flex-1 text-xs border rounded px-2 py-1"
-              />
-              <button
-                onClick={handleAddTouchpoint}
-                className="text-xs bg-blue-500 text-white px-2 rounded hover:bg-blue-600"
-              >
-                +
-              </button>
-            </div>
+            )}
+            {/* Add touchpoint - hidden during export */}
+            {!isExporting && (
+              <div className="space-y-2">
+                <select
+                  value={newTouchpoint.channel}
+                  onChange={(e) => setNewTouchpoint({ ...newTouchpoint, channel: e.target.value })}
+                  className="w-full text-xs border border-slate-200 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  {CHANNELS.map((ch) => (
+                    <option key={ch.id} value={ch.id}>
+                      {ch.icon} {ch.label}
+                    </option>
+                  ))}
+                </select>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newTouchpoint.description}
+                    onChange={(e) => setNewTouchpoint({ ...newTouchpoint, description: e.target.value })}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddTouchpoint()}
+                    placeholder="Describe the touchpoint..."
+                    className="flex-1 text-xs border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <button
+                    onClick={handleAddTouchpoint}
+                    disabled={!newTouchpoint.description.trim()}
+                    className="px-3 py-2 bg-blue-500 text-white text-xs font-medium rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Pain Points */}
         <div>
-          <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+          <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
             Pain Points
           </h4>
           <div className="space-y-2">
-            {stage.painPoints?.map((pp, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-2 bg-red-50 p-2 rounded text-sm group"
-              >
-                <span className="text-red-500">⚠</span>
-                <span className="flex-1">{pp}</span>
-                <button
-                  onClick={() => handleRemovePainPoint(index)}
-                  className="text-red-500 opacity-0 group-hover:opacity-100"
+            {stage.painPoints?.length > 0 ? (
+              stage.painPoints.map((pp, index) => (
+                <div
+                  key={index}
+                  className="bg-red-50 border border-red-100 px-3 py-2 rounded-lg text-sm group"
+                  style={{ display: 'table', width: '100%' }}
                 >
-                  ×
-                </button>
-              </div>
-            ))}
-            {/* Add pain point */}
-            <div className="relative">
-              <div className="flex gap-1">
-                <input
-                  type="text"
-                  value={newPainPoint}
-                  onChange={(e) => setNewPainPoint(e.target.value)}
-                  onFocus={() => setShowPainPointSuggestions(true)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleAddPainPoint(newPainPoint)}
-                  placeholder="Add pain point..."
-                  className="flex-1 text-xs border rounded px-2 py-1"
-                />
-                <button
-                  onClick={() => handleAddPainPoint(newPainPoint)}
-                  className="text-xs bg-red-500 text-white px-2 rounded hover:bg-red-600"
-                >
-                  +
-                </button>
-              </div>
-              {/* Suggestions from personas */}
-              {showPainPointSuggestions && painPointSuggestions.length > 0 && (
-                <div className="absolute z-10 left-0 right-0 mt-1 bg-white border rounded shadow-lg max-h-32 overflow-y-auto">
-                  <div className="text-xs text-gray-500 px-2 py-1 border-b">
-                    From linked personas:
-                  </div>
-                  {painPointSuggestions.map((suggestion, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => handleAddPainPoint(suggestion)}
-                      className="w-full text-left text-xs px-2 py-1 hover:bg-gray-100 truncate"
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
+                  <span className="text-red-400" style={{ display: 'table-cell', verticalAlign: 'top', width: '16px', lineHeight: '20px' }}>●</span>
+                  <span className="text-slate-700" style={{ display: 'table-cell', verticalAlign: 'top', lineHeight: '20px' }}>{pp}</span>
+                  {!isExporting && (
+                    <span style={{ display: 'table-cell', verticalAlign: 'top', width: '20px', textAlign: 'right' }}>
+                      <button
+                        onClick={() => handleRemovePainPoint(index)}
+                        className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  )}
                 </div>
-              )}
-            </div>
+              ))
+            ) : (
+              <div className="text-xs text-slate-400 italic py-2">
+                {isExporting ? 'No pain points identified' : 'No pain points yet'}
+              </div>
+            )}
+            {/* Add pain point - hidden during export */}
+            {!isExporting && (
+              <div className="relative">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newPainPoint}
+                    onChange={(e) => setNewPainPoint(e.target.value)}
+                    onFocus={() => setShowPainPointSuggestions(true)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddPainPoint(newPainPoint)}
+                    placeholder="Add a pain point..."
+                    className="flex-1 text-xs border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  />
+                  <button
+                    onClick={() => handleAddPainPoint(newPainPoint)}
+                    disabled={!newPainPoint.trim()}
+                    className="px-3 py-2 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Add
+                  </button>
+                </div>
+                {showPainPointSuggestions && painPointSuggestions.length > 0 && (
+                  <div className="absolute z-10 left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-32 overflow-y-auto">
+                    <div className="text-xs text-slate-500 px-3 py-2 border-b border-slate-100 bg-slate-50 font-medium">
+                      Suggestions from personas
+                    </div>
+                    {painPointSuggestions.map((suggestion, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleAddPainPoint(suggestion)}
+                        className="w-full text-left text-xs px-3 py-2 hover:bg-slate-50 text-slate-600 border-b border-slate-50 last:border-0"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
         {/* Opportunities */}
         <div>
-          <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+          <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
             Opportunities
           </h4>
           <div className="space-y-2">
-            {stage.opportunities?.map((opp, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-2 bg-green-50 p-2 rounded text-sm group"
-              >
-                <span className="text-green-500">💡</span>
-                <span className="flex-1">{opp}</span>
-                <button
-                  onClick={() => handleRemoveOpportunity(index)}
-                  className="text-red-500 opacity-0 group-hover:opacity-100"
+            {stage.opportunities?.length > 0 ? (
+              stage.opportunities.map((opp, index) => (
+                <div
+                  key={index}
+                  className="bg-emerald-50 border border-emerald-100 px-3 py-2 rounded-lg text-sm group"
+                  style={{ display: 'table', width: '100%' }}
                 >
-                  ×
+                  <span className="text-emerald-400" style={{ display: 'table-cell', verticalAlign: 'top', width: '16px', lineHeight: '20px' }}>●</span>
+                  <span className="text-slate-700" style={{ display: 'table-cell', verticalAlign: 'top', lineHeight: '20px' }}>{opp}</span>
+                  {!isExporting && (
+                    <span style={{ display: 'table-cell', verticalAlign: 'top', width: '20px', textAlign: 'right' }}>
+                      <button
+                        onClick={() => handleRemoveOpportunity(index)}
+                        className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="text-xs text-slate-400 italic py-2">
+                {isExporting ? 'No opportunities identified' : 'No opportunities yet'}
+              </div>
+            )}
+            {/* Add opportunity - hidden during export */}
+            {!isExporting && (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={newOpportunity}
+                  onChange={(e) => setNewOpportunity(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddOpportunity()}
+                  placeholder="Add an opportunity..."
+                  className="flex-1 text-xs border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                />
+                <button
+                  onClick={handleAddOpportunity}
+                  disabled={!newOpportunity.trim()}
+                  className="px-3 py-2 bg-emerald-500 text-white text-xs font-medium rounded-lg hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Add
                 </button>
               </div>
-            ))}
-            {/* Add opportunity */}
-            <div className="flex gap-1">
-              <input
-                type="text"
-                value={newOpportunity}
-                onChange={(e) => setNewOpportunity(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleAddOpportunity()}
-                placeholder="Add opportunity..."
-                className="flex-1 text-xs border rounded px-2 py-1"
-              />
-              <button
-                onClick={handleAddOpportunity}
-                className="text-xs bg-green-500 text-white px-2 rounded hover:bg-green-600"
-              >
-                +
-              </button>
-            </div>
+            )}
           </div>
         </div>
       </div>
