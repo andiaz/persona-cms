@@ -51,6 +51,7 @@ export default function JourneyMapPage() {
   const [mapName, setMapName] = useState('');
   const [showPersonaSelector, setShowPersonaSelector] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [showExportMenu, setShowExportMenu] = useState(false);
   const mapRef = useRef(null);
   const router = useRouter();
   const { id } = router.query;
@@ -176,7 +177,7 @@ export default function JourneyMapPage() {
   const exportAsPNG = async () => {
     if (!mapRef.current) return;
 
-    // Set exporting state to hide interactive elements
+    setShowExportMenu(false);
     setIsExporting(true);
 
     // Wait for state to update and re-render
@@ -192,8 +193,81 @@ export default function JourneyMapPage() {
     const image = canvas.toDataURL('image/png');
     const link = document.createElement('a');
     link.href = image;
-    link.download = `journey-map-${journeyMap?.name || 'export'}.png`;
+    link.download = `${journeyMap.name.replace(/\s+/g, '-').toLowerCase()}-journey-map.png`;
     link.click();
+  };
+
+  // Export as Markdown
+  const handleExportMarkdown = () => {
+    if (!journeyMap) return;
+    setShowExportMenu(false);
+
+    const linkedPersonas = getLinkedPersonas();
+
+    let md = `# ${journeyMap.name}\n\n`;
+    md += `*Exported: ${new Date().toLocaleDateString()}*\n\n`;
+
+    if (linkedPersonas.length > 0) {
+      md += `**Personas:** ${linkedPersonas.map((p) => p.name).join(', ')}\n\n`;
+    }
+
+    md += `---\n\n`;
+
+    journeyMap.stages?.forEach((stage, idx) => {
+      md += `## ${idx + 1}. ${stage.name}\n\n`;
+
+      // Touchpoints
+      if (stage.touchpoints?.length > 0) {
+        md += `### Touchpoints\n`;
+        stage.touchpoints.forEach((tp) => {
+          md += `- **${tp.channel}**: ${tp.description}\n`;
+        });
+        md += `\n`;
+      }
+
+      // Emotions
+      if (stage.emotions?.length > 0 && linkedPersonas.length > 0) {
+        md += `### Emotions\n`;
+        stage.emotions.forEach((emo) => {
+          const persona = linkedPersonas.find((p) => p.id === emo.personaId);
+          if (persona) {
+            const emotionLabel = emo.value >= 1 ? 'Positive' : emo.value <= -1 ? 'Negative' : 'Neutral';
+            md += `- **${persona.name}**: ${emotionLabel} (${emo.value})\n`;
+          }
+        });
+        md += `\n`;
+      }
+
+      // Pain Points
+      if (stage.painPoints?.length > 0) {
+        md += `### Pain Points\n`;
+        stage.painPoints.forEach((pp) => {
+          md += `- ${pp}\n`;
+        });
+        md += `\n`;
+      }
+
+      // Opportunities
+      if (stage.opportunities?.length > 0) {
+        md += `### Opportunities\n`;
+        stage.opportunities.forEach((op) => {
+          md += `- ${op}\n`;
+        });
+        md += `\n`;
+      }
+
+      md += `---\n\n`;
+    });
+
+    md += `_Exported from Persona Lab_\n`;
+
+    // Download as file
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const link = document.createElement('a');
+    link.download = `${journeyMap.name.replace(/\s+/g, '-').toLowerCase()}-journey-map.md`;
+    link.href = URL.createObjectURL(blob);
+    link.click();
+    URL.revokeObjectURL(link.href);
   };
 
   if (!journeyMap) {
@@ -357,12 +431,44 @@ export default function JourneyMapPage() {
                 Generate Test Data
               </button>
 
-              <button
-                onClick={exportAsPNG}
-                className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
-              >
-                Export PNG
-              </button>
+              {/* Export Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowExportMenu(!showExportMenu)}
+                  className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  </svg>
+                  Export
+                </button>
+
+                {showExportMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-50">
+                    <button
+                      onClick={exportAsPNG}
+                      className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                    >
+                      <span className="text-lg">🖼️</span> Export as PNG
+                    </button>
+                    <button
+                      onClick={handleExportMarkdown}
+                      className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                    >
+                      <span className="text-lg">📝</span> Export as Markdown
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowExportMenu(false);
+                        window.print();
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                    >
+                      <span className="text-lg">🖨️</span> Print / PDF
+                    </button>
+                  </div>
+                )}
+              </div>
 
               <Link
                 href="/journey-maps"
@@ -431,11 +537,14 @@ export default function JourneyMapPage() {
         </div>
       </main>
 
-      {/* Click outside to close persona selector */}
-      {showPersonaSelector && (
+      {/* Click outside to close dropdowns */}
+      {(showPersonaSelector || showExportMenu) && (
         <div
           className="fixed inset-0 z-10"
-          onClick={() => setShowPersonaSelector(false)}
+          onClick={() => {
+            setShowPersonaSelector(false);
+            setShowExportMenu(false);
+          }}
         />
       )}
     </div>

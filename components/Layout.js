@@ -10,6 +10,7 @@ export default function Layout({ children }) {
     { href: '/', label: 'Personas' },
     { href: '/journey-maps', label: 'Journey Maps' },
     { href: '/impact-maps', label: 'Impact Maps' },
+    { href: '/boards', label: 'Sprint Board' },
   ];
 
   const isActive = (href) => {
@@ -21,6 +22,9 @@ export default function Layout({ children }) {
     }
     if (href === '/impact-maps') {
       return currentPath === '/impact-maps' || currentPath === '/impact-map';
+    }
+    if (href === '/boards') {
+      return currentPath === '/boards' || currentPath === '/board';
     }
     return currentPath.startsWith(href);
   };

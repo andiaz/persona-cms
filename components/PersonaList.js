@@ -4,7 +4,7 @@ import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'; // Imp
 import Link from 'next/link';
 import Image from 'next/image';
 
-const PersonaList = ({ personas, onDeletePersona }) => {
+const PersonaList = ({ personas, onDeletePersona, onDuplicatePersona }) => {
   const router = useRouter();
   const [selectedTag, setSelectedTag] = useState(''); // State for filtering by tag
   const [searchQuery, setSearchQuery] = useState(''); // Search state
@@ -363,6 +363,12 @@ const PersonaList = ({ personas, onDeletePersona }) => {
                       className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
                     >
                       Edit
+                    </button>
+                    <button
+                      onClick={() => onDuplicatePersona(persona.id)}
+                      className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+                    >
+                      Duplicate
                     </button>
                     <button
                       onClick={() => onDeletePersona(persona.id)}

@@ -9,6 +9,7 @@ import {
   addPersona as storageAddPersona,
   deletePersona as storageDeletePersona,
   updatePersona as storageUpdatePersona,
+  duplicatePersona as storageDuplicatePersona,
   exportAllData,
   importData,
   migrateFromSessionStorage,
@@ -181,6 +182,11 @@ export default function Home() {
     setPersonas(getPersonas());
   };
 
+  const duplicatePersona = (id) => {
+    storageDuplicatePersona(id);
+    setPersonas(getPersonas());
+  };
+
   const handleGenerateTest = () => {
     const newPersona = generateTestPersona();
     storageAddPersona(newPersona);
@@ -270,6 +276,7 @@ export default function Home() {
         personas={personas}
         onEditPersona={editPersona}
         onDeletePersona={deletePersona}
+        onDuplicatePersona={duplicatePersona}
         onAddPersona={addPersona}
       />
     </div>

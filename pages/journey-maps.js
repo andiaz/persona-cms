@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import {
   getJourneyMaps,
   deleteJourneyMap,
+  duplicateJourneyMap,
   addJourneyMap,
   getPersonas,
   getDefaultStages,
@@ -40,6 +41,11 @@ export default function JourneyMapsPage() {
       deleteJourneyMap(id);
       setJourneyMaps(getJourneyMaps());
     }
+  };
+
+  const handleDuplicate = (id) => {
+    duplicateJourneyMap(id);
+    setJourneyMaps(getJourneyMaps());
   };
 
   const handleCreate = () => {
@@ -120,7 +126,12 @@ export default function JourneyMapsPage() {
               key={map.id}
               className="bg-white rounded-xl border border-slate-200 hover:border-slate-300 transition-colors p-5"
             >
-              <h3 className="text-base font-semibold text-slate-900 mb-2">{map.name}</h3>
+              <Link
+                href={`/journey-map?id=${map.id}`}
+                className="text-base font-semibold text-slate-900 hover:text-slate-600 transition-colors block mb-2"
+              >
+                {map.name}
+              </Link>
 
               {/* Linked Personas */}
               <div className="text-sm text-slate-500 mb-3">
@@ -162,6 +173,13 @@ export default function JourneyMapsPage() {
                 >
                   Open
                 </Link>
+                <button
+                  onClick={() => handleDuplicate(map.id)}
+                  className="px-3 py-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors text-sm"
+                  aria-label="Duplicate journey map"
+                >
+                  Duplicate
+                </button>
                 <button
                   onClick={() => handleDelete(map.id)}
                   className="px-3 py-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm"
