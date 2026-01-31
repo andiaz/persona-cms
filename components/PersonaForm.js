@@ -299,10 +299,12 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
       name,
       goals,
       painPoints,
+      tasks,
+      contextOfUse,
+      functionality,
       tags,
       avatarImage,
       priority: personaPriority,
-      // ... other fields
     };
 
     if (personaToEdit) {
@@ -310,7 +312,6 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
     } else {
       onAddPersona(personaData);
     }
-    // ... rest of the submit handler
   };
 
   const handleCancel = (event) => {
