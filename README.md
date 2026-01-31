@@ -1,6 +1,6 @@
 # Persona Lab
 
-A free, privacy-first tool for creating user personas, journey maps, and impact maps. Your data stays on your device - no account required, no cloud storage, complete privacy.
+A free, privacy-first tool for creating user personas, journey maps, impact maps, sprint boards, and site maps. Your data stays on your device - no account required, no cloud storage, complete privacy.
 
 **[Try the Live Demo →](https://andiaz.github.io/persona-cms/)**
 
@@ -17,10 +17,11 @@ A free, privacy-first tool for creating user personas, journey maps, and impact 
 ## Who Is This For?
 
 - **UX Designers** creating and presenting user personas
-- **Product Managers** documenting target users and their journeys
+- **Product Managers** documenting target users, journeys, and planning sprints
 - **Researchers** organizing findings into actionable personas
 - **Students** learning UX design principles
-- **Startups** needing persona tools without the subscription cost
+- **Startups** needing persona and planning tools without the subscription cost
+- **Development Teams** tracking sprint work and mapping application architecture
 
 ## Features
 
@@ -50,10 +51,34 @@ A free, privacy-first tool for creating user personas, journey maps, and impact 
 - Export as PNG or Markdown (Obsidian-compatible)
 - Reorder nodes with visual feedback
 
+### Sprint Board
+
+- Kanban-style board with customizable columns (Backlog, To Do, In Progress, Done)
+- Link tasks to personas to track who benefits from each work item
+- Story point estimation and tracking
+- Priority levels (Critical, High, Medium, Low)
+- Pan and zoom canvas for large boards
+- Filter tasks by persona, priority, or points
+- Export as PNG or Markdown
+
+### Site Maps
+
+- Visual tree structure for mapping website/app architecture (FlowMapp-style)
+- 16 screen types with distinctive thumbnails (Landing, Login, Dashboard, Form, Table, etc.)
+- Hierarchical parent-child relationships with auto-layout
+- Release tagging (MVP, v1.0, v2.0, etc.) with custom tags
+- Status tracking (Planned, In Progress, Done)
+- Link screens to personas to show which users access each screen
+- Filter by status, release tag, or persona (including "unassigned" filters)
+- Pan and zoom canvas with keyboard shortcuts (Space+drag, Ctrl+scroll)
+- Export as PNG or Markdown
+
 ### Export & Layouts
 
 - Multiple layout templates (Card, Full Profile, Minimal, Print)
 - Export personas as PNG images
+- Export boards and site maps as PNG
+- Export to Markdown (Obsidian-compatible)
 - PDF export via print dialog
 - JSON export/import for backups
 
@@ -95,7 +120,15 @@ npm start
 
 ### Backup Your Data
 
-Use the export feature to save your personas, journey maps, and impact maps as JSON files. This allows you to:
+Use the export feature to save all your data as JSON files. This includes:
+
+- Personas
+- Journey Maps
+- Impact Maps
+- Sprint Boards
+- Site Maps
+
+This allows you to:
 
 - Back up your work
 - Transfer data between devices
@@ -103,7 +136,7 @@ Use the export feature to save your personas, journey maps, and impact maps as J
 
 ### Import Data
 
-Import previously exported JSON files to restore your personas, journey maps, and impact maps.
+Import previously exported JSON files to restore all your personas, maps, boards, and site maps.
 
 ## Contributing
 
