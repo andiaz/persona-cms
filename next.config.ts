@@ -6,7 +6,11 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'export',
+  basePath: '/persona-cms',
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default withBundleAnalyzer(nextConfig);
