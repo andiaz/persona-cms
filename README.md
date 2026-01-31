@@ -1,6 +1,6 @@
 # Persona Lab
 
-A free, privacy-first tool for creating user personas and journey maps. Your data stays on your device - no account required, no cloud storage, complete privacy.
+A free, privacy-first tool for creating user personas, journey maps, and impact maps. Your data stays on your device - no account required, no cloud storage, complete privacy.
 
 **[Try the Live Demo →](https://andiaz.github.io/persona-cms/)**
 
@@ -39,6 +39,16 @@ A free, privacy-first tool for creating user personas and journey maps. Your dat
 - Track touchpoints, emotions, pain points, and opportunities per stage
 - Emotion indicators with visual graphs
 - Drag-and-drop stage reordering
+
+### Impact Mapping
+
+- Goal-oriented strategy visualization (Goal → Actors → Impacts → Deliverables)
+- Link actors to existing personas for consistency
+- Track deliverable status (Planned, In Progress, Done, Rejected)
+- Interactive tree visualization with zoom controls
+- Hover to highlight related nodes in the hierarchy
+- Export as PNG or Markdown (Obsidian-compatible)
+- Reorder nodes with visual feedback
 
 ### Export & Layouts
 
@@ -85,7 +95,7 @@ npm start
 
 ### Backup Your Data
 
-Use the export feature to save your personas and journey maps as JSON files. This allows you to:
+Use the export feature to save your personas, journey maps, and impact maps as JSON files. This allows you to:
 
 - Back up your work
 - Transfer data between devices
@@ -93,7 +103,7 @@ Use the export feature to save your personas and journey maps as JSON files. Thi
 
 ### Import Data
 
-Import previously exported JSON files to restore your personas and journey maps.
+Import previously exported JSON files to restore your personas, journey maps, and impact maps.
 
 ## Contributing
 

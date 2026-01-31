@@ -9,6 +9,7 @@ export default function Layout({ children }) {
   const navItems = [
     { href: '/', label: 'Personas' },
     { href: '/journey-maps', label: 'Journey Maps' },
+    { href: '/impact-maps', label: 'Impact Maps' },
   ];
 
   const isActive = (href) => {
@@ -17,6 +18,9 @@ export default function Layout({ children }) {
     }
     if (href === '/journey-maps') {
       return currentPath === '/journey-maps' || currentPath === '/journey-map';
+    }
+    if (href === '/impact-maps') {
+      return currentPath === '/impact-maps' || currentPath === '/impact-map';
     }
     return currentPath.startsWith(href);
   };

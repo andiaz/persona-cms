@@ -396,7 +396,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               </div>
               <button
                 type="button"
-                onClick={generateAvatar}
+                onClick={() => generateAvatar()}
                 className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-colors"
               >
                 Generate Avatar
