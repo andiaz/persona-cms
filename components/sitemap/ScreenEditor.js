@@ -206,7 +206,7 @@ export default function ScreenEditor({
                     onMouseDown={() => handleChange('release', screen.release)}
                     className="w-full px-3 py-2 text-sm text-left text-slate-700 hover:bg-slate-50 flex items-center justify-between border-b border-slate-100"
                   >
-                    <span>"{screen.release}"</span>
+                    <span>&quot;{screen.release}&quot;</span>
                     <span className="text-xs text-green-600">New tag</span>
                   </button>
                 )}

@@ -50,7 +50,7 @@ export default function HelpPage() {
               <li><strong>Avatar generation</strong> - Auto-generate avatars based on persona names</li>
               <li><strong>Tags</strong> - Organize personas with custom tags for filtering</li>
               <li><strong>Priority levels</strong> - Mark importance (Critical, High, Medium, Low)</li>
-              <li><strong>Sample data</strong> - Use "Pre-fill Sample Data" to quickly test</li>
+              <li><strong>Sample data</strong> - Use &quot;Pre-fill Sample Data&quot; to quickly test</li>
             </ul>
           </div>
         </section>
@@ -173,7 +173,7 @@ export default function HelpPage() {
           <div className="bg-slate-50 rounded-lg p-4">
             <h3 className="text-sm font-medium text-slate-700 mb-2">Local Storage</h3>
             <p className="text-sm text-slate-600">
-              All data is stored in your browser's local storage. No server, no account required.
+              All data is stored in your browser&apos;s local storage. No server, no account required.
               Your data stays private and works offline.
             </p>
           </div>

@@ -185,7 +185,7 @@ export function InterviewGuideStandalone() {
       <div className="mt-6 p-4 bg-amber-50 rounded-lg border border-amber-100">
         <p className="text-sm text-slate-600">
           <strong>Tip:</strong> Use these questions as a starting point. Adapt them based on your
-          specific context and research goals. Follow up with "why" and "can you tell me more"
+          specific context and research goals. Follow up with &quot;why&quot; and &quot;can you tell me more&quot;
           to dig deeper into interesting responses.
         </p>
       </div>

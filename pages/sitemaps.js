@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { getSitemaps, deleteSitemap, duplicateSitemap, addSitemap, SCREEN_TYPES } from '../lib/storage';
+import { getSitemaps, deleteSitemap, duplicateSitemap, addSitemap } from '../lib/storage';
 
 // Miniature preview of sitemap tree
 function SitemapPreview({ screens }) {
@@ -177,14 +177,6 @@ export default function SitemapsPage() {
     setShowCreateModal(false);
     setNewSitemapName('');
     router.push(`/sitemap?id=${newSitemap.id}`);
-  };
-
-  const getScreenTypeCounts = (screens) => {
-    const counts = {};
-    screens?.forEach(s => {
-      counts[s.screenType] = (counts[s.screenType] || 0) + 1;
-    });
-    return counts;
   };
 
   const getStatusCounts = (screens) => {

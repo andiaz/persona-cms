@@ -205,7 +205,8 @@ export default function SitemapCanvas({
     }
   }, [isPanning]);
 
-  // Calculate canvas bounds for proper sizing
+  // Calculate canvas bounds for proper sizing (used for future features)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const bounds = useMemo(() => {
     let maxX = 0;
     let maxY = 0;
@@ -297,7 +298,7 @@ export default function SitemapCanvas({
       {!isExporting && screens.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="text-center text-slate-400">
-            <p className="text-lg mb-2">Click "Add Root Screen" to start</p>
+            <p className="text-lg mb-2">Click &quot;Add Root Screen&quot; to start</p>
             <p className="text-sm">Ctrl+scroll to zoom, Space+drag or middle-click to pan</p>
           </div>
         </div>
