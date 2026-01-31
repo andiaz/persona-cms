@@ -279,7 +279,8 @@ const PersonaList = ({ personas, onDeletePersona, onDuplicatePersona }) => {
               {filteredPersonas.map((persona) => (
                 <li
                   key={persona.id}
-                  className="p-4 bg-white border border-slate-200 rounded-xl hover:border-slate-300 transition duration-200 h-full flex flex-col"
+                  id={`persona-${persona.id}`}
+                  className="p-4 bg-white border border-slate-200 rounded-xl hover:border-slate-300 transition-all duration-200 h-full flex flex-col"
                 >
                   <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-4">
                     <Link

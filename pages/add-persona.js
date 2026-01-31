@@ -48,7 +48,8 @@ const AddPersonaPage = () => {
     else if (fromSource === 'journey-maps') {
       router.push(`/journey-maps?newPersona=${id}`);
     } else {
-      router.push('/');
+      // Redirect to index with the new persona ID to scroll to it
+      router.push(`/?newPersona=${id}`);
     }
   };
 

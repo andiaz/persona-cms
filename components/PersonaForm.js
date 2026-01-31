@@ -12,6 +12,7 @@ import {
   funEmoji,
 } from '@dicebear/collection';
 import { getAllTags } from '../lib/storage';
+import InterviewGuide from './InterviewGuide';
 
 const AVATAR_STYLES = [
   { id: 'lorelei', name: 'Illustrated', style: lorelei },
@@ -58,6 +59,7 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
   const isHandlingSuggestion = useRef(false);
   const [personaPriority, setPersonaPriority] = useState(0);
   const [avatarStyle, setAvatarStyle] = useState('lorelei');
+  const [showInterviewGuide, setShowInterviewGuide] = useState(false);
 
   const generateAvatar = (seedName, style) => {
     const selectedStyle = style
@@ -328,20 +330,43 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
       onSubmit={handleSubmit}
       className="space-y-6 p-6 bg-white rounded-xl border border-slate-200"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <h3 className="text-lg font-semibold text-slate-900">
           {personaToEdit ? 'Edit Persona' : 'Add a New Persona'}
         </h3>
-        {!personaToEdit && (
+        <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={prefillSampleData}
-            className="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+            onClick={() => setShowInterviewGuide(!showInterviewGuide)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+              showInterviewGuide
+                ? 'bg-blue-100 text-blue-700'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+            title="Show interview question reference"
           >
-            Pre-fill Sample Data
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="hidden sm:inline">Interview Guide</span>
           </button>
-        )}
+          {!personaToEdit && (
+            <button
+              type="button"
+              onClick={prefillSampleData}
+              className="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+            >
+              Pre-fill Sample Data
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* Interview Guide Panel */}
+      <InterviewGuide
+        isOpen={showInterviewGuide}
+        onClose={() => setShowInterviewGuide(false)}
+      />
 
       <div className="space-y-2">
         <label htmlFor="name" className="block text-sm font-medium">

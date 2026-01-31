@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import PersonaList from '../components/PersonaList';
 import React from 'react';
 import { createAvatar } from '@dicebear/core';
@@ -159,6 +160,7 @@ const generateTestPersona = () => {
 export default function Home() {
   const [personas, setPersonas] = useState([]);
   const fileInputRef = React.useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     // Migrate from sessionStorage if needed (one-time)
@@ -166,6 +168,27 @@ export default function Home() {
     // Load personas from localStorage
     setPersonas(getPersonas());
   }, []);
+
+  // Scroll to newly created persona
+  useEffect(() => {
+    const { newPersona } = router.query;
+    if (newPersona && personas.length > 0) {
+      // Small delay to ensure the DOM is ready
+      setTimeout(() => {
+        const personaElement = document.getElementById(`persona-${newPersona}`);
+        if (personaElement) {
+          personaElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Brief highlight effect
+          personaElement.classList.add('ring-2', 'ring-blue-500');
+          setTimeout(() => {
+            personaElement.classList.remove('ring-2', 'ring-blue-500');
+          }, 2000);
+        }
+        // Clear the query param without triggering a re-render
+        router.replace('/', undefined, { shallow: true });
+      }, 100);
+    }
+  }, [router.query, personas, router]);
 
   const editPersona = (updatedPersona) => {
     storageUpdatePersona(updatedPersona);
