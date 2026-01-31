@@ -2,6 +2,8 @@
 
 A free, privacy-first tool for creating user personas and journey maps. Your data stays on your device - no account required, no cloud storage, complete privacy.
 
+**[Try the Live Demo →](https://andiaz.github.io/persona-cms/)**
+
 ## Why Persona Lab?
 
 | Feature          | Persona Lab                    | Paid Alternatives     |
