@@ -191,6 +191,13 @@ export default function Home() {
     const newPersona = generateTestPersona();
     storageAddPersona(newPersona);
     setPersonas(getPersonas());
+    // Scroll to show the persona list
+    setTimeout(() => {
+      const listElement = document.getElementById('persona-list');
+      if (listElement) {
+        listElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
   };
 
   const handleExport = () => {
@@ -225,10 +232,10 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex justify-between items-center mb-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Personas</h1>
+          <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">Personas</h1>
           <p className="text-sm text-slate-500 mt-1">
             {personas.length === 0
               ? 'Create your first user persona'
@@ -238,7 +245,7 @@ export default function Home() {
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={handleExport}
-            className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+            className="px-3 sm:px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
             title="Export all data as JSON backup"
           >
             Export
@@ -252,33 +259,35 @@ export default function Home() {
           />
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+            className="px-3 sm:px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
             title="Import data from JSON backup"
           >
             Import
           </button>
           <button
             onClick={handleGenerateTest}
-            className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+            className="hidden sm:block px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
             title="Generate a test persona with sample data"
           >
             Generate Test
           </button>
           <Link
             href="/add-persona"
-            className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
+            className="px-3 sm:px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
           >
             + Add Persona
           </Link>
         </div>
       </div>
-      <PersonaList
-        personas={personas}
-        onEditPersona={editPersona}
-        onDeletePersona={deletePersona}
-        onDuplicatePersona={duplicatePersona}
-        onAddPersona={addPersona}
-      />
+      <div id="persona-list">
+        <PersonaList
+          personas={personas}
+          onEditPersona={editPersona}
+          onDeletePersona={deletePersona}
+          onDuplicatePersona={duplicatePersona}
+          onAddPersona={addPersona}
+        />
+      </div>
     </div>
   );
 }

@@ -442,9 +442,9 @@ export default function BoardsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Sprint Boards</h1>
+          <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">Sprint Boards</h1>
           <p className="text-sm text-slate-500 mt-1">
             Infinite canvas for brainstorming, ideation, and design sprints
           </p>
@@ -455,7 +455,7 @@ export default function BoardsPage() {
             setSelectedTemplate('blank');
             setShowCreateModal(true);
           }}
-          className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
+          className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors self-start sm:self-auto"
         >
           + New Board
         </button>
@@ -549,16 +549,16 @@ export default function BoardsPage() {
                 </Link>
 
                 {/* Actions */}
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Link
                     href={`/board?id=${board.id}`}
-                    className="flex-1 px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg text-center hover:bg-slate-900 transition-colors"
+                    className="flex-1 min-w-[80px] px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg text-center hover:bg-slate-900 transition-colors"
                   >
                     Open
                   </Link>
                   <button
                     onClick={() => handleDuplicate(board.id)}
-                    className="px-3 py-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors text-sm"
+                    className="hidden sm:block px-3 py-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors text-sm"
                     aria-label="Duplicate board"
                   >
                     Duplicate

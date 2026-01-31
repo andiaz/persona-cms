@@ -115,26 +115,50 @@ export default function SitemapToolbar({
   const hasFilters = filterStatus || filterPersonaId || filterRelease;
 
   return (
-    <div className="flex items-center justify-between bg-white rounded-lg border border-slate-200 px-3 py-2">
-      {/* Left side - Add screen */}
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-white rounded-lg border border-slate-200 px-3 py-2">
+      {/* Top row on mobile / Left side on desktop */}
+      <div className="flex items-center justify-between sm:justify-start gap-2">
         <button
           onClick={onAddRootScreen}
-          className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          Add Root Screen
+          <span className="hidden xs:inline">Add Root Screen</span>
+          <span className="xs:hidden">Add</span>
         </button>
 
-        <div className="text-xs text-slate-400 ml-2">
+        <div className="text-xs text-slate-400">
           {screens.length} screen{screens.length !== 1 ? 's' : ''}
+        </div>
+
+        {/* Zoom controls - shown inline on mobile */}
+        <div className="flex sm:hidden items-center gap-1 ml-auto">
+          <button
+            onClick={handleZoomOut}
+            className="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded transition-colors"
+            title="Zoom out"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+            </svg>
+          </button>
+          <span className="text-xs text-slate-600 min-w-[40px] text-center">{Math.round(viewport.zoom * 100)}%</span>
+          <button
+            onClick={handleZoomIn}
+            className="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded transition-colors"
+            title="Zoom in"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
         </div>
       </div>
 
-      {/* Center - Filters */}
-      <div className="flex items-center gap-2">
+      {/* Filters row */}
+      <div className="flex items-center gap-2 flex-wrap">
         {/* Status filter */}
         <div className="relative" ref={statusRef}>
           <button
@@ -362,8 +386,8 @@ export default function SitemapToolbar({
         )}
       </div>
 
-      {/* Right side - Zoom controls */}
-      <div className="flex items-center gap-1">
+      {/* Right side - Zoom controls (desktop only) */}
+      <div className="hidden sm:flex items-center gap-1">
         <button
           onClick={handleZoomOut}
           className="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded transition-colors"

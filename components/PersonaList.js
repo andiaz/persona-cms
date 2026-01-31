@@ -4,6 +4,13 @@ import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'; // Imp
 import Link from 'next/link';
 import Image from 'next/image';
 
+const SORT_OPTIONS = {
+  priority: { label: 'Priority', fn: (a, b) => (b.priority || 0) - (a.priority || 0) },
+  alphabetical: { label: 'A-Z', fn: (a, b) => a.name.localeCompare(b.name) },
+  newest: { label: 'Newest', fn: (a, b) => b.id - a.id },
+  oldest: { label: 'Oldest', fn: (a, b) => a.id - b.id },
+};
+
 const PersonaList = ({ personas, onDeletePersona, onDuplicatePersona }) => {
   const router = useRouter();
   const [selectedTag, setSelectedTag] = useState(''); // State for filtering by tag
@@ -13,6 +20,7 @@ const PersonaList = ({ personas, onDeletePersona, onDuplicatePersona }) => {
   const searchInputRef = useRef(null); // Ref for the search input field
   const [personaSearchQuery, setPersonaSearchQuery] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('priority');
 
   const priorityLabels = {
     0: 'Needs prioritization',
@@ -82,7 +90,7 @@ const PersonaList = ({ personas, onDeletePersona, onDuplicatePersona }) => {
 
       return true;
     })
-    .sort((a, b) => b.priority - a.priority); // Sort by priority
+    .sort(SORT_OPTIONS[sortBy]?.fn || SORT_OPTIONS.priority.fn);
 
   useEffect(() => {
     // Close dropdown when clicking outside
@@ -163,7 +171,7 @@ const PersonaList = ({ personas, onDeletePersona, onDuplicatePersona }) => {
           </div>
 
           {/* Filters row */}
-          <div className="flex gap-4 items-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center">
             {/* Search input */}
             <div className="flex-1">
               <input
@@ -175,79 +183,88 @@ const PersonaList = ({ personas, onDeletePersona, onDuplicatePersona }) => {
               />
             </div>
 
-            {/* Priority filter */}
-            <div className="w-48">
+            {/* Filters - wrap on mobile */}
+            <div className="flex flex-wrap gap-2 sm:gap-4">
+              {/* Priority filter */}
               <select
                 value={priorityFilter}
                 onChange={(e) => setPriorityFilter(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 bg-white"
+                className="flex-1 min-w-[120px] sm:flex-none sm:w-40 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 bg-white text-sm"
               >
                 <option value="all">All Priorities</option>
-                <option value="4">Critical Only</option>
-                <option value="3">High & Above</option>
-                <option value="2">Medium & Above</option>
-                <option value="1">Low & Above</option>
-                <option value="0">Needs Prioritization</option>
+                <option value="4">Critical</option>
+                <option value="3">High+</option>
+                <option value="2">Medium+</option>
+                <option value="1">Low+</option>
+                <option value="0">Unset</option>
               </select>
-            </div>
 
-            {/* Tag filter */}
-            <div className="relative w-48" ref={dropdownRef}>
-              <button
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 flex items-center justify-between bg-white"
-              >
-                <span>{selectedTag || 'Select a Tag'}</span>
-                <ChevronDownIcon
-                  className={`w-4 h-4 ml-2 transition-transform ${
-                    dropdownOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-
-              {dropdownOpen && (
-                <div className="absolute right-0 w-64 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50">
-                  {/* Search input */}
-                  <input
-                    ref={searchInputRef} // Set the ref to the input field
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search tags..."
-                    className="w-full px-4 py-2 border-b border-gray-300 rounded-t-md focus:ring-2 focus:ring-indigo-500"
+              {/* Tag filter */}
+              <div className="relative flex-1 min-w-[120px] sm:flex-none sm:w-40" ref={dropdownRef}>
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 flex items-center justify-between bg-white text-sm"
+                >
+                  <span className="truncate">{selectedTag || 'All Tags'}</span>
+                  <ChevronDownIcon
+                    className={`w-4 h-4 ml-1 shrink-0 transition-transform ${
+                      dropdownOpen ? 'rotate-180' : ''
+                    }`}
                   />
-                  {/* Dropdown options */}
-                  <div className="max-h-60 overflow-y-auto">
-                    {/* Only render "All tags" if there's no search query */}
-                    {!searchQuery && (
-                      <button
-                        onClick={() => {
-                          setSelectedTag(''); // Reset the filter
-                          setSearchQuery(''); // Clear the search query
-                          setDropdownOpen(false); // Close dropdown
-                        }}
-                        className="w-full px-4 py-2 text-left hover:bg-gray-100"
-                      >
-                        All tags
-                      </button>
-                    )}
+                </button>
 
-                    {/* Filtered tags */}
-                    {filteredTags.map((tag) => (
-                      <button
-                        key={tag}
-                        onClick={() => {
-                          setSelectedTag(tag); // Set selected tag
-                          setDropdownOpen(false); // Close dropdown
-                        }}
-                        className="w-full px-4 py-2 text-left hover:bg-gray-100"
-                      >
-                        {tag}
-                      </button>
-                    ))}
+                {dropdownOpen && (
+                  <div className="absolute left-0 sm:right-0 sm:left-auto w-64 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50">
+                    <input
+                      ref={searchInputRef}
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search tags..."
+                      className="w-full px-4 py-2 border-b border-gray-300 rounded-t-md focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <div className="max-h-60 overflow-y-auto">
+                      {!searchQuery && (
+                        <button
+                          onClick={() => {
+                            setSelectedTag('');
+                            setSearchQuery('');
+                            setDropdownOpen(false);
+                          }}
+                          className="w-full px-4 py-2 text-left hover:bg-gray-100 text-sm"
+                        >
+                          All tags
+                        </button>
+                      )}
+                      {filteredTags.map((tag) => (
+                        <button
+                          key={tag}
+                          onClick={() => {
+                            setSelectedTag(tag);
+                            setDropdownOpen(false);
+                          }}
+                          className="w-full px-4 py-2 text-left hover:bg-gray-100 text-sm"
+                        >
+                          {tag}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+
+              {/* Sort dropdown */}
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="flex-1 min-w-[100px] sm:flex-none sm:w-28 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 bg-white text-sm"
+              >
+                {Object.entries(SORT_OPTIONS).map(([key, { label }]) => (
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
@@ -264,12 +281,12 @@ const PersonaList = ({ personas, onDeletePersona, onDuplicatePersona }) => {
                   key={persona.id}
                   className="p-4 bg-white border border-slate-200 rounded-xl hover:border-slate-300 transition duration-200 h-full flex flex-col"
                 >
-                  <div className="flex items-center gap-4 mb-4">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-4">
                     <Link
                       href={`/view-persona?id=${persona.id}`}
-                      className="group flex items-center gap-4 cursor-pointer"
+                      className="group flex items-center gap-3 sm:gap-4 cursor-pointer min-w-0"
                     >
-                      <div className="relative w-16 h-16 bg-gray-200 rounded-full overflow-hidden shrink-0 ring-2 ring-transparent group-hover:ring-blue-500 transition-all">
+                      <div className="relative w-12 h-12 sm:w-16 sm:h-16 bg-gray-200 rounded-full overflow-hidden shrink-0 ring-2 ring-transparent group-hover:ring-blue-500 transition-all">
                         {persona.avatarImage ? (
                           <Image
                             src={persona.avatarImage}
@@ -278,17 +295,17 @@ const PersonaList = ({ personas, onDeletePersona, onDuplicatePersona }) => {
                             className="object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm text-center">
+                          <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs sm:text-sm text-center">
                             No image
                           </div>
                         )}
                       </div>
-                      <h3 className="text-xl font-semibold group-hover:text-blue-500 transition-colors">
+                      <h3 className="text-lg sm:text-xl font-semibold group-hover:text-blue-500 transition-colors truncate">
                         {persona.name}
                       </h3>
                     </Link>
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
                         priorityColors[persona.priority || 0]
                       }`}
                     >
@@ -351,22 +368,22 @@ const PersonaList = ({ personas, onDeletePersona, onDuplicatePersona }) => {
                     <strong className="block mt-2">Context of Use:</strong>
                     <p className="pl-5">{persona.contextOfUse || ''}</p>
                   </div>
-                  <div className="mt-auto pt-4 flex items-center gap-2">
+                  <div className="mt-auto pt-4 flex flex-wrap items-center gap-2">
                     <Link
                       href={`/view-persona?id=${persona.id}`}
-                      className="px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
+                      className="px-3 sm:px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-900 transition-colors"
                     >
                       View
                     </Link>
                     <button
                       onClick={() => handleEditClick(persona)}
-                      className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+                      className="px-3 sm:px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => onDuplicatePersona(persona.id)}
-                      className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+                      className="hidden sm:block px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
                     >
                       Duplicate
                     </button>

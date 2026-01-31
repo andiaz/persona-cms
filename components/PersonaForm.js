@@ -361,8 +361,8 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
 
       <div className="space-y-2">
         <label className="block text-sm font-medium">Avatar Image:</label>
-        <div className="flex items-start gap-4">
-          <div className="relative w-32 h-32 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+          <div className="relative w-24 h-24 sm:w-32 sm:h-32 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
             {avatarImage ? (
               <Image
                 src={avatarImage}
@@ -371,15 +371,15 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
                 className="object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
+              <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
                 No image
               </div>
             )}
           </div>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 w-full sm:w-auto">
             {/* Generate Avatar Section */}
             <div className="space-y-2">
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1.5 justify-center sm:justify-start">
                 {AVATAR_STYLES.map((style) => (
                   <button
                     key={style.id}
@@ -398,17 +398,17 @@ const PersonaForm = ({ onAddPersona, personaToEdit, onEditPersona }) => {
               <button
                 type="button"
                 onClick={() => generateAvatar()}
-                className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-colors"
+                className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:from-blue-600 hover:to-purple-600 transition-colors"
               >
                 Generate Avatar
               </button>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-400 text-center sm:text-left">
                 {name ? `Based on "${name}"` : 'Enter a name first for consistent results'}
               </p>
             </div>
 
             {/* Upload/Remove Section */}
-            <div className="flex gap-2 pt-2 border-t border-slate-100">
+            <div className="flex gap-2 pt-2 border-t border-slate-100 justify-center sm:justify-start">
               <input
                 type="file"
                 ref={fileInputRef}

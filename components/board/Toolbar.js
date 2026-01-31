@@ -37,19 +37,19 @@ export default function Toolbar({
   };
 
   return (
-    <div className="flex items-center gap-2 bg-white rounded-lg shadow-sm border border-slate-200 p-2">
+    <div className="flex items-center gap-1 sm:gap-2 bg-white rounded-lg shadow-sm border border-slate-200 p-1.5 sm:p-2 flex-wrap sm:flex-nowrap">
       {/* Add Note Button - draggable */}
       <button
         onClick={onAddNote}
         draggable
         onDragStart={(e) => handleDragStart(e, 'note')}
-        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 bg-yellow-100 hover:bg-yellow-200 rounded-lg transition-colors cursor-grab active:cursor-grabbing"
+        className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 text-sm font-medium text-slate-700 bg-yellow-100 hover:bg-yellow-200 rounded-lg transition-colors cursor-grab active:cursor-grabbing"
         title="Click to add, or drag to canvas"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
         </svg>
-        Add Note
+        <span className="hidden sm:inline">Note</span>
       </button>
 
       {/* Add Group Button - draggable */}
@@ -57,22 +57,22 @@ export default function Toolbar({
         onClick={onAddGroup}
         draggable
         onDragStart={(e) => handleDragStart(e, 'group')}
-        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-grab active:cursor-grabbing"
+        className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-grab active:cursor-grabbing"
         title="Click to add, or drag to canvas"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z" />
         </svg>
-        Add Group
+        <span className="hidden sm:inline">Group</span>
       </button>
 
       {/* Divider */}
-      <div className="w-px h-8 bg-slate-200" />
+      <div className="w-px h-8 bg-slate-200 hidden sm:block" />
 
       {/* Color Picker - show for notes */}
       {selectedElement && selectedElement.type === 'note' && (
         <>
-          <div className="flex items-center gap-1">
+          <div className="hidden sm:flex items-center gap-1">
             <span className="text-xs text-slate-500 mr-1">Color:</span>
             {Object.entries(NOTE_COLORS).map(([colorName, colorClasses]) => (
               <button
@@ -85,14 +85,14 @@ export default function Toolbar({
               />
             ))}
           </div>
-          <div className="w-px h-8 bg-slate-200" />
+          <div className="w-px h-8 bg-slate-200 hidden sm:block" />
         </>
       )}
 
       {/* Color Picker - show for groups */}
       {selectedElement && selectedElement.type === 'group' && (
         <>
-          <div className="flex items-center gap-1">
+          <div className="hidden sm:flex items-center gap-1">
             <span className="text-xs text-slate-500 mr-1">Color:</span>
             {Object.entries(GROUP_COLORS).map(([colorName, colorClasses]) => (
               <button
@@ -105,7 +105,7 @@ export default function Toolbar({
               />
             ))}
           </div>
-          <div className="w-px h-8 bg-slate-200" />
+          <div className="w-px h-8 bg-slate-200 hidden sm:block" />
         </>
       )}
 
