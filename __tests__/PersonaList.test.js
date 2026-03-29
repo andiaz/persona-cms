@@ -14,6 +14,7 @@ describe('PersonaList', () => {
   ];
 
   const mockOnDeletePersona = jest.fn();
+  const mockOnDuplicatePersona = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -24,6 +25,7 @@ describe('PersonaList', () => {
       <PersonaList
         personas={mockPersonas}
         onDeletePersona={mockOnDeletePersona}
+        onDuplicatePersona={mockOnDuplicatePersona}
       />
     );
 
@@ -37,10 +39,10 @@ describe('PersonaList', () => {
       <PersonaList
         personas={mockPersonas}
         onDeletePersona={mockOnDeletePersona}
+        onDuplicatePersona={mockOnDuplicatePersona}
       />
     );
 
-    // Use the aria-label to find the delete button
     const deleteButton = screen.getByRole('button', {
       name: /delete persona/i,
     });
@@ -49,19 +51,30 @@ describe('PersonaList', () => {
   });
 
   it('handles empty persona list', () => {
-    render(<PersonaList personas={[]} onDeletePersona={jest.fn()} />);
-    expect(screen.getByText(/no personas found/i)).toBeInTheDocument();
+    render(
+      <PersonaList
+        personas={[]}
+        onDeletePersona={jest.fn()}
+        onDuplicatePersona={jest.fn()}
+      />
+    );
+    expect(screen.getByText(/no personas yet/i)).toBeInTheDocument();
   });
 
   it('filters personas by search query', () => {
     const personas = [
-      { id: 1, name: 'Test One', tags: ['tag1'] },
-      { id: 2, name: 'Test Two', tags: ['tag2'] },
+      { id: 1, name: 'Test One', goals: ['g'], painPoints: ['p'], tags: ['tag1'] },
+      { id: 2, name: 'Test Two', goals: ['g'], painPoints: ['p'], tags: ['tag2'] },
     ];
 
-    render(<PersonaList personas={personas} onDeletePersona={jest.fn()} />);
+    render(
+      <PersonaList
+        personas={personas}
+        onDeletePersona={jest.fn()}
+        onDuplicatePersona={jest.fn()}
+      />
+    );
 
-    // Use the persona search input
     const searchInput = screen.getByPlaceholderText(/search personas/i);
     fireEvent.change(searchInput, { target: { value: 'One' } });
 
@@ -71,19 +84,24 @@ describe('PersonaList', () => {
 
   it('filters personas by tag', () => {
     const personas = [
-      { id: 1, name: 'Test One', tags: ['tag1'] },
-      { id: 2, name: 'Test Two', tags: ['tag2'] },
+      { id: 1, name: 'Test One', goals: ['g'], painPoints: ['p'], tags: ['tag1'] },
+      { id: 2, name: 'Test Two', goals: ['g'], painPoints: ['p'], tags: ['tag2'] },
     ];
 
-    render(<PersonaList personas={personas} onDeletePersona={jest.fn()} />);
+    render(
+      <PersonaList
+        personas={personas}
+        onDeletePersona={jest.fn()}
+        onDuplicatePersona={jest.fn()}
+      />
+    );
 
-    // Click the tag dropdown to open it
-    fireEvent.click(screen.getByText(/select a tag/i));
+    // Click the tag dropdown to open it (button shows "All Tags" by default)
+    fireEvent.click(screen.getByText(/all tags/i));
 
-    // Use a more specific query to get the tag button in the dropdown
-    const tagButton = screen
-      .getAllByRole('button')
-      .find((button) => button.textContent === 'tag1');
+    // Select tag1 from the dropdown
+    const tagButtons = screen.getAllByRole('button');
+    const tagButton = tagButtons.find((button) => button.textContent === 'tag1');
     fireEvent.click(tagButton);
 
     expect(screen.getByText('Test One')).toBeInTheDocument();

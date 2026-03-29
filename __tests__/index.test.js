@@ -32,17 +32,17 @@ describe('Home page', () => {
     expect(screen.getByText('Test Persona')).toBeInTheDocument();
   });
 
-  it('renders add new persona button', () => {
+  it('renders add persona button', () => {
     render(<Home />);
     expect(
-      screen.getByRole('link', { name: /add new persona/i })
+      screen.getByRole('link', { name: /add persona/i })
     ).toBeInTheDocument();
   });
 
   it('navigates to add persona page', () => {
     render(<Home />);
 
-    fireEvent.click(screen.getByRole('link', { name: /add new persona/i }));
+    fireEvent.click(screen.getByRole('link', { name: /add persona/i }));
 
     expect(mockRouter.push).toHaveBeenCalledWith('/add-persona');
   });

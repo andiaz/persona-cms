@@ -54,8 +54,8 @@ describe('PersonaForm', () => {
   it('shows validation errors for empty required fields', async () => {
     render(<PersonaForm onAddPersona={mockOnAddPersona} />);
 
-    // Try to submit without required fields
-    fireEvent.submit(screen.getByRole('button', { name: /add persona/i }));
+    // Click the submit button (triggers native HTML validation unlike fireEvent.submit)
+    fireEvent.click(screen.getByRole('button', { name: /add persona/i }));
 
     expect(mockOnAddPersona).not.toHaveBeenCalled();
     expect(screen.getByTestId('name-input')).toBeInvalid();
@@ -73,10 +73,11 @@ describe('PersonaForm', () => {
     // Check that the goal was added
     expect(goalInput).toHaveValue('New Goal');
 
-    // Remove the goal using the test id
-    fireEvent.click(screen.getByTestId('delete-goal-0'));
+    // Remove the first goal using the Delete Goal button
+    const deleteButtons = screen.getAllByRole('button', { name: /delete goal/i });
+    fireEvent.click(deleteButtons[0]);
 
-    // Check that the goal was removed
+    // Check that the goal was removed (second empty goal remains)
     const updatedGoalInput = screen.getByPlaceholderText(/enter a goal/i);
     expect(updatedGoalInput).toHaveValue('');
   });

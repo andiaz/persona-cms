@@ -1,5 +1,21 @@
 import { render } from '@testing-library/react';
 
+// Mock @dicebear ESM packages
+jest.mock('@dicebear/core', () => ({
+  createAvatar: () => ({
+    toDataUri: () => 'data:image/svg+xml;base64,mock',
+  }),
+}));
+
+jest.mock('@dicebear/collection', () => ({
+  lorelei: {},
+  notionists: {},
+  adventurer: {},
+  avataaars: {},
+  bottts: {},
+  funEmoji: {},
+}));
+
 const mockRouter = {
   push: jest.fn(),
   replace: jest.fn(),

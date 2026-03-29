@@ -14,6 +14,12 @@ import SitemapCanvas from '../components/sitemap/SitemapCanvas';
 import SitemapToolbar from '../components/sitemap/SitemapToolbar';
 import ScreenEditor from '../components/sitemap/ScreenEditor';
 
+// Escape HTML to prevent XSS when using innerHTML
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
 export default function SitemapPage() {
   const [sitemap, setSitemap] = useState(null);
   const [editingName, setEditingName] = useState(false);
@@ -292,8 +298,8 @@ export default function SitemapPage() {
           gap: 6px;
         `;
         header.innerHTML = `
-          <span style="font-size: 12px;">${screenType.icon}</span>
-          <span style="font-size: 11px; font-weight: 500; color: white;">${screenType.label}</span>
+          <span style="font-size: 12px;">${escapeHtml(screenType.icon)}</span>
+          <span style="font-size: 11px; font-weight: 500; color: white;">${escapeHtml(screenType.label)}</span>
         `;
         node.appendChild(header);
 
@@ -304,10 +310,10 @@ export default function SitemapPage() {
         `;
         content.innerHTML = `
           <div style="font-weight: 600; font-size: 13px; color: #0f172a; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-            ${screen.name || 'Untitled Screen'}
+            ${escapeHtml(screen.name) || 'Untitled Screen'}
           </div>
           <div style="font-size: 11px; color: #64748b; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            ${screen.description || 'No description'}
+            ${escapeHtml(screen.description) || 'No description'}
           </div>
         `;
         node.appendChild(content);
